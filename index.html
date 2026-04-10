@@ -3,561 +3,705 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NexaLink – Internet de Alta Velocidad</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<title>NexaLink</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-:root{
-  --gold:#b8883c;--gold2:#d4a855;--gold-light:#fdf6ec;--gold-mid:#f0d9a8;
-  --aqua:#1a8f7a;--aqua-light:#e6f7f4;--aqua-mid:#7dcfc4;
-  --bg:#f7f6f3;--bg2:#ffffff;--bg3:#f0ede8;--bg4:#e8e4dc;
-  --ink:#0d1117;--text2:#5c5c72;--text3:#9494a8;
-  --border:#e4e0d8;--border2:#ccc8be;
-  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
-  --shadow-md:0 4px 24px rgba(0,0,0,0.09);
-  --shadow-lg:0 12px 48px rgba(0,0,0,0.12);
-  --radius:16px;--radius-sm:10px;
+/* ============================================================
+   DESIGN SYSTEM – Minimalista moderno
+   Paleta: Blanco roto + Grafito + Acento Verde Salvia
+============================================================ */
+:root {
+  --white: #ffffff;
+  --off: #f9f9f8;
+  --bg: #f4f3f0;
+  --bg2: #eeece8;
+  --ink: #111110;
+  --ink2: #3a3a38;
+  --ink3: #706f6c;
+  --ink4: #a8a7a3;
+  --line: #e5e3de;
+  --line2: #d4d2cc;
+  --accent: #2d6a4f;
+  --accent2: #40916c;
+  --accent-light: #f0f7f4;
+  --accent-mid: #b7dfc9;
+  --amber: #92400e;
+  --amber-light: #fef3c7;
+  --red: #991b1b;
+  --red-light: #fef2f2;
+  --r: 12px;
+  --r-sm: 8px;
+  --r-xs: 6px;
+  --sidebar-w: 240px;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 24px rgba(0,0,0,.08);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.12);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;min-height:100vh}
-h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 
-.screen{display:none;min-height:100vh;animation:fadeUp .38s ease}
-.screen.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+html { scroll-behavior: smooth }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; font-size: 14px; line-height: 1.5 }
+h1,h2,h3,h4,h5 { font-family: 'Space Grotesk', sans-serif; line-height: 1.2 }
+button { cursor: pointer; font-family: 'Inter', sans-serif }
+input, select, textarea { font-family: 'Inter', sans-serif }
+a { text-decoration: none; color: inherit }
 
-/* ===== NAV ===== */
-nav.main-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,246,243,0.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
-.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--ink);cursor:pointer}
-.logo span{color:var(--gold)}
-.nav-links{display:flex;gap:28px;list-style:none}
-.nav-links a{color:var(--text2);font-size:14px;cursor:pointer;transition:color .2s}
-.nav-links a:hover{color:var(--gold)}
-.nav-acts{display:flex;gap:10px}
-.btn{padding:9px 22px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;transition:all .22s;border:none;letter-spacing:.1px}
-.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2)}
-.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(184,136,60,.22)}
-.btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(184,136,60,.36)}
+/* ── Screens ── */
+.screen { display: none }
+.screen.active { display: block }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:translateY(0) } }
+.fade-up { animation: fadeUp .32s ease }
 
-/* ===== HERO ===== */
-.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:130px 32px 80px;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid var(--gold-mid);border-radius:50px;font-size:12px;color:var(--gold);margin-bottom:28px;background:var(--gold-light);font-weight:500}
-.bdot{width:7px;height:7px;border-radius:50%;background:var(--aqua);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
-.hero h1{font-size:clamp(44px,7vw,86px);font-weight:800;line-height:1.02;letter-spacing:-3px;margin-bottom:22px}
-.hero h1 .hi{background:linear-gradient(130deg,var(--gold),var(--gold2) 50%,var(--aqua));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:18px;color:var(--text2);max-width:500px;margin:0 auto 40px;line-height:1.72;font-weight:300}
-.hero-acts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-lg{padding:14px 34px;font-size:15px;border-radius:50px}
-.btn-outline-lg{padding:13px 30px;font-size:15px;border-radius:50px;background:var(--bg2);border:1px solid var(--border2);color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .22s;box-shadow:var(--shadow)}
-.btn-outline-lg:hover{border-color:var(--gold);color:var(--gold)}
+/* ============================================================
+   LANDING
+============================================================ */
+#landing { min-height: 100vh; background: var(--white) }
 
-/* STATS */
-.stats-strip{display:flex;justify-content:center;flex-wrap:wrap;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;z-index:1}
-.stat-item{flex:1;min-width:130px;max-width:200px;text-align:center;padding:30px 16px;border-right:1px solid var(--border)}
-.stat-item:last-child{border-right:none}
-.stat-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--gold);letter-spacing:-1px}
-.stat-l{font-size:12.5px;color:var(--text2);margin-top:4px}
+/* Top nav */
+.l-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 60px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+}
+.l-logo { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -.5px }
+.l-logo em { color: var(--accent); font-style: normal }
+.l-links { display: flex; gap: 28px; list-style: none }
+.l-links a { font-size: 13.5px; color: var(--ink3); font-weight: 400; transition: color .18s; cursor: pointer }
+.l-links a:hover { color: var(--ink) }
+.l-acts { display: flex; gap: 10px }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: 50px; font-size: 13.5px; font-weight: 500; border: none; transition: all .2s; cursor: pointer; white-space: nowrap }
+.btn-line { background: transparent; border: 1px solid var(--line2); color: var(--ink2) }
+.btn-line:hover { border-color: var(--ink3); color: var(--ink) }
+.btn-solid { background: var(--ink); color: var(--white) }
+.btn-solid:hover { background: var(--ink2) }
+.btn-accent { background: var(--accent); color: var(--white) }
+.btn-accent:hover { background: var(--accent2) }
 
-/* SECTIONS */
-.section{padding:80px 48px;position:relative;z-index:1}
-.section.alt{background:var(--bg2)}
-.section-head{margin-bottom:48px}
-.s-tag{font-size:11px;letter-spacing:3px;color:var(--aqua);text-transform:uppercase;font-weight:600;margin-bottom:10px}
-.s-title{font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px}
-.s-sub{color:var(--text2);font-size:16px;font-weight:300;line-height:1.7;max-width:480px}
+/* Hero */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 120px 40px 80px; text-align: center;
+  background: var(--white); position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(45,106,79,.06) 0%, transparent 70%);
+}
+.hero-inner { position: relative; z-index: 1; max-width: 700px }
+.h-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 14px; border-radius: 50px;
+  background: var(--accent-light); border: 1px solid var(--accent-mid);
+  font-size: 12px; font-weight: 500; color: var(--accent); margin-bottom: 28px;
+}
+.h-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hero h1 { font-size: clamp(42px,6vw,78px); font-weight: 700; letter-spacing: -2.5px; color: var(--ink); margin-bottom: 18px; line-height: 1 }
+.hero h1 .gr { background: linear-gradient(120deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text }
+.hero p { font-size: 17px; color: var(--ink3); max-width: 460px; margin: 0 auto 36px; font-weight: 300; line-height: 1.75 }
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap }
+.btn-hero { padding: 13px 32px; font-size: 15px; border-radius: 50px }
 
-/* PLANS */
-.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:20px;max-width:920px;margin:0 auto}
-.plan-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:34px 28px;position:relative;transition:all .3s;overflow:hidden;box-shadow:var(--shadow)}
-.plan-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--gold-mid)}
-.plan-card.featured{border:2px solid var(--gold);background:linear-gradient(160deg,#fff,var(--gold-light))}
-.pop-badge{position:absolute;top:20px;right:-30px;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:4px 44px;transform:rotate(45deg);letter-spacing:1.5px}
-.plan-icon{width:44px;height:44px;border-radius:12px;background:var(--gold-light);border:1px solid var(--gold-mid);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
-.plan-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:4px}
-.plan-spd{color:var(--aqua);font-size:13px;font-weight:500;margin-bottom:18px}
-.plan-price{display:flex;align-items:baseline;gap:3px;margin-bottom:22px}
-.plan-price .cur{font-size:18px;color:var(--text2);font-weight:300;margin-top:8px}
-.plan-price .amt{font-family:'Syne',sans-serif;font-size:46px;font-weight:800;letter-spacing:-2px;color:var(--ink)}
-.plan-price .per{font-size:13px;color:var(--text2);margin-left:2px}
-.plan-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
-.plan-feats li{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text2)}
-.plan-feats li::before{content:'';width:17px;height:17px;min-width:17px;border-radius:50%;background:var(--aqua-light);border:1px solid var(--aqua-mid);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M4 8.5l3 3 6-6' stroke='%231a8f7a' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-.plan-btn{width:100%;padding:12px;border-radius:50px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;border:1.5px solid var(--gold);background:transparent;color:var(--gold)}
-.plan-btn:hover,.plan-card.featured .plan-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(184,136,60,.3)}
+/* Stats row */
+.stats-row {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  background: var(--off);
+}
+.stat-box { flex: 1; min-width: 130px; max-width: 180px; text-align: center; padding: 28px 20px; border-right: 1px solid var(--line) }
+.stat-box:last-child { border-right: none }
+.stat-n { font-family: 'Space Grotesk',sans-serif; font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -1px }
+.stat-l { font-size: 12px; color: var(--ink4); margin-top: 3px }
 
-/* FEATURES */
-.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;max-width:920px;margin:0 auto}
-.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px;transition:all .3s;box-shadow:var(--shadow)}
-.feat-card:hover{border-color:var(--aqua-mid);transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.feat-icon{width:42px;height:42px;border-radius:11px;background:var(--aqua-light);border:1px solid var(--aqua-mid);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:14px}
-.feat-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:7px}
-.feat-text{font-size:13px;color:var(--text2);line-height:1.65;font-weight:300}
+/* Plans */
+.l-section { padding: 80px 40px; max-width: 1100px; margin: 0 auto }
+.sec-tag { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 8px }
+.sec-title { font-size: clamp(26px,3.5vw,40px); font-weight: 700; letter-spacing: -1.5px; color: var(--ink); margin-bottom: 10px }
+.sec-sub { font-size: 15px; color: var(--ink3); font-weight: 300; max-width: 450px; line-height: 1.7 }
+.sec-head { margin-bottom: 48px }
 
-/* CHATBOX */
-.chatbox{max-width:580px;margin:0 auto;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-md)}
-.chat-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--bg3)}
-.chat-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
-.chat-info h4{font-size:14px;font-weight:600;margin-bottom:2px}
-.chat-info p{font-size:11px;color:var(--aqua);display:flex;align-items:center;gap:5px}
-.chat-info p::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--aqua);animation:pulse 2s infinite}
-.chat-msgs{height:260px;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px;background:#fafafa}
-.chat-msgs::-webkit-scrollbar{width:4px}
-.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.msg{max-width:82%;padding:11px 15px;border-radius:14px;font-size:13px;line-height:1.5}
-.msg.bot{background:var(--bg2);border:1px solid var(--border);border-radius:14px 14px 14px 3px;color:var(--ink)}
-.msg.user{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;margin-left:auto;border-radius:14px 14px 3px 14px}
-.chat-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 18px 14px;background:#fafafa}
-.chip{padding:5px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:50px;font-size:11.5px;color:var(--text2);cursor:pointer;transition:all .2s}
-.chip:hover{border-color:var(--gold);color:var(--gold)}
-.chat-inp-row{display:flex;padding:14px 16px;gap:10px;border-top:1px solid var(--border)}
-.chat-inp{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:10px 18px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border .2s}
-.chat-inp:focus{border-color:var(--gold)}
-.chat-send{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;cursor:pointer;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;transition:transform .2s;flex-shrink:0}
-.chat-send:hover{transform:scale(1.08)}
+.plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 16px }
+.plan-card {
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 32px 28px; position: relative; overflow: hidden;
+  transition: all .28s; cursor: default;
+}
+.plan-card:hover { border-color: var(--line2); box-shadow: var(--shadow-md); transform: translateY(-3px) }
+.plan-card.feat { border: 1.5px solid var(--ink); background: var(--ink) }
+.plan-card.feat .plan-name, .plan-card.feat .plan-amt, .plan-card.feat .plan-spd { color: var(--white) }
+.plan-card.feat .plan-feat-item { color: rgba(255,255,255,.7) }
+.plan-card.feat .plan-feat-item::before { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.3) }
+.plan-card.feat .plan-cta { background: var(--white); color: var(--ink) }
+.plan-card.feat .plan-cta:hover { background: var(--bg) }
+.plan-card.feat .plan-per { color: rgba(255,255,255,.5) }
+.pop-label { position: absolute; top: 20px; right: 20px; padding: 3px 10px; border-radius: 50px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.2); font-size: 10px; font-weight: 600; color: var(--white); letter-spacing: 1px }
+.plan-name { font-size: 13px; font-weight: 500; color: var(--ink3); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 16px }
+.plan-spd { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 6px }
+.plan-price { display: flex; align-items: baseline; gap: 2px; margin-bottom: 24px }
+.plan-cur { font-size: 18px; color: var(--ink3); font-weight: 400; margin-top: 8px }
+.plan-amt { font-family: 'Space Grotesk',sans-serif; font-size: 52px; font-weight: 700; letter-spacing: -2px; color: var(--ink) }
+.plan-per { font-size: 13px; color: var(--ink4) }
+.plan-feats { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px }
+.plan-feat-item { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--ink3) }
+.plan-feat-item::before { content: ''; width: 16px; height: 16px; min-width: 16px; border-radius: 50%; background: var(--accent-light); border: 1px solid var(--accent-mid); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8l3 3 6-6' stroke='%232d6a4f' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") }
+.plan-cta { width: 100%; padding: 12px; border-radius: 50px; font-size: 13.5px; font-weight: 600; background: var(--ink); color: var(--white); border: none; transition: all .2s }
+.plan-cta:hover { background: var(--ink2) }
 
-/* FOOTER */
-footer{padding:36px 48px;border-top:1px solid var(--border);background:var(--bg2);text-align:center;color:var(--text2);font-size:13px;position:relative;z-index:1}
-footer strong{color:var(--gold);font-family:'Syne',sans-serif;font-size:15px}
-.foot-links{display:flex;justify-content:center;gap:24px;margin-top:12px}
-.foot-links a{color:var(--text3);font-size:12px;cursor:pointer;transition:color .2s}
-.foot-links a:hover{color:var(--gold)}
+/* Features grid */
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px }
+.feat-box { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 24px 20px; transition: all .25s }
+.feat-box:hover { border-color: var(--accent-mid); transform: translateY(-2px); box-shadow: var(--shadow) }
+.feat-ico { width: 38px; height: 38px; border-radius: var(--r-sm); background: var(--accent-light); border: 1px solid var(--accent-mid); display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 12px }
+.feat-ttl { font-family: 'Space Grotesk',sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 6px }
+.feat-txt { font-size: 13px; color: var(--ink3); line-height: 1.6; font-weight: 300 }
 
-/* ===== AUTH MODAL ===== */
-.overlay{position:fixed;inset:0;background:rgba(13,17,23,.55);backdrop-filter:blur(10px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.overlay.open{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:22px;width:100%;max-width:430px;padding:36px;position:relative;animation:fadeUp .3s ease;box-shadow:var(--shadow-lg)}
-.modal-x{position:absolute;top:18px;right:18px;background:var(--bg3);border:none;color:var(--text2);cursor:pointer;font-size:16px;width:30px;height:30px;border-radius:50%;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.modal-x:hover{background:var(--bg4);color:var(--ink)}
-.m-logo{text-align:center;margin-bottom:24px}
-.m-logo h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.5px}
-.m-logo h2 span{color:var(--gold)}
-.m-logo p{font-size:13px;color:var(--text2);margin-top:5px}
-.tabs{display:flex;background:var(--bg3);border-radius:50px;padding:4px;margin-bottom:24px}
-.tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border-radius:50px;transition:all .2s;color:var(--text2);background:none;border:none;font-family:'DM Sans',sans-serif}
-.tab.active{background:var(--bg2);color:var(--gold);border:1px solid var(--border);box-shadow:var(--shadow)}
-.fg{margin-bottom:15px}
-.fl{display:block;font-size:12px;color:var(--text2);margin-bottom:7px;font-weight:500;letter-spacing:.2px}
-.fi{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border .2s}
-.fi:focus{border-color:var(--gold);background:var(--bg2)}
-.fi::placeholder{color:var(--text3)}
-select.fi{appearance:none;cursor:pointer}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.str-bar{height:3px;border-radius:2px;background:var(--border);margin-top:7px;overflow:hidden}
-.str-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0}
-.str-txt{font-size:11px;color:var(--text2);margin-top:4px}
-.cb-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:16px}
-.custom-cb{width:16px;height:16px;min-width:16px;border:1.5px solid var(--border2);border-radius:4px;cursor:pointer;appearance:none;background:var(--bg2);transition:all .2s;margin-top:2px}
-.custom-cb:checked{background:var(--gold);border-color:var(--gold)}
-.cb-row label{font-size:12px;color:var(--text2);cursor:pointer;line-height:1.6}
-.cb-row a{color:var(--gold)}
-.btn-block{width:100%;padding:13px;font-size:15px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-weight:700;cursor:pointer;border:none;font-family:'Syne',sans-serif;transition:all .25s;letter-spacing:.2px}
-.btn-block:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(184,136,60,.35)}
-.ferr{font-size:11px;color:#c0392b;margin-top:4px;display:none}
-.demo-hint{text-align:center;font-size:12px;color:var(--text2);margin-top:14px;padding:12px;background:var(--bg3);border-radius:var(--radius-sm)}
-.demo-hint strong{color:var(--gold)}
-.demo-hint em{color:var(--aqua)}
+/* Chatbox */
+.chatbox { max-width: 560px; margin: 0 auto; background: var(--white); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow) }
+.chat-hd { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 11px; background: var(--off) }
+.chat-av { width: 34px; height: 34px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--white) }
+.chat-meta h4 { font-size: 13.5px; font-weight: 600 }
+.chat-meta p { font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 5px; margin-top: 1px }
+.chat-meta p::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite }
+.chat-msgs { height: 240px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px }
+.chat-msgs::-webkit-scrollbar { width: 3px }
+.chat-msgs::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 2px }
+.msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5 }
+.msg.bot { background: var(--off); border: 1px solid var(--line); border-radius: 12px 12px 12px 3px; color: var(--ink) }
+.msg.user { background: var(--ink); color: var(--white); margin-left: auto; border-radius: 12px 12px 3px 12px }
+.chat-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px }
+.chip { padding: 5px 12px; border: 1px solid var(--line); border-radius: 50px; font-size: 11.5px; color: var(--ink3); cursor: pointer; transition: all .18s; background: var(--white) }
+.chip:hover { border-color: var(--ink); color: var(--ink) }
+.chat-inp-row { display: flex; padding: 12px 14px; gap: 8px; border-top: 1px solid var(--line) }
+.chat-inp { flex: 1; background: var(--off); border: 1px solid var(--line); border-radius: 50px; padding: 9px 16px; color: var(--ink); font-size: 13px; outline: none; transition: border .18s }
+.chat-inp:focus { border-color: var(--ink2) }
+.chat-inp::placeholder { color: var(--ink4) }
+.chat-send { width: 34px; height: 34px; border-radius: 50%; background: var(--ink); border: none; color: var(--white); font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all .18s }
+.chat-send:hover { background: var(--accent) }
 
-/* ===== APP ===== */
-#app{background:var(--bg);min-height:100vh;display:flex;flex-direction:column}
-.app-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;height:60px;position:sticky;top:0;z-index:50;gap:4px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.app-logo{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;margin-right:24px;cursor:pointer;flex-shrink:0;color:var(--ink)}
-.app-logo span{color:var(--gold)}
-.app-tabs{display:flex;height:100%;overflow-x:auto;flex:1}
-.app-tab{padding:0 18px;height:100%;border:none;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
-.app-tab:hover{color:var(--ink)}
-.app-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-.notif-dot{width:17px;height:17px;border-radius:50%;background:var(--gold);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.app-user{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.uav{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
-.uname{font-size:12px;color:var(--text2)}
-.logout-btn{padding:6px 14px;border:1px solid var(--border);border-radius:50px;background:transparent;color:var(--text2);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.logout-btn:hover{border-color:var(--gold);color:var(--gold)}
+/* Footer */
+.l-footer { padding: 32px 40px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 16px }
+.l-footer p { font-size: 13px; color: var(--ink4) }
+.foot-links { display: flex; gap: 20px }
+.foot-links a { font-size: 13px; color: var(--ink3); cursor: pointer; transition: color .18s }
+.foot-links a:hover { color: var(--ink) }
 
-/* APP CONTENT */
-.app-content{flex:1;padding:28px 24px;max-width:1200px;margin:0 auto;width:100%}
-.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:22px;letter-spacing:-.5px}
-.page-title .hi{color:var(--gold)}
+/* ============================================================
+   AUTH MODAL
+============================================================ */
+.overlay { position: fixed; inset: 0; background: rgba(17,17,16,.6); backdrop-filter: blur(10px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px }
+.overlay.open { display: flex }
+.modal { background: var(--white); border: 1px solid var(--line); border-radius: 18px; width: 100%; max-width: 420px; padding: 36px; position: relative; box-shadow: var(--shadow-lg); animation: fadeUp .3s ease }
+.modal-x { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: var(--off); color: var(--ink3); display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: all .18s }
+.modal-x:hover { background: var(--line); color: var(--ink) }
+.m-logo { text-align: center; margin-bottom: 22px }
+.m-logo h2 { font-family: 'Space Grotesk',sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -.5px }
+.m-logo h2 em { color: var(--accent); font-style: normal }
+.m-logo p { font-size: 13px; color: var(--ink3); margin-top: 4px }
+.tabs { display: flex; background: var(--off); border-radius: 50px; padding: 3px; margin-bottom: 22px; border: 1px solid var(--line) }
+.tab { flex: 1; padding: 8px; text-align: center; font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 50px; border: none; background: none; color: var(--ink3); transition: all .2s }
+.tab.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.08); border: 1px solid var(--line) }
+.fg { margin-bottom: 13px }
+.fl { display: block; font-size: 11.5px; color: var(--ink3); margin-bottom: 6px; font-weight: 500; letter-spacing: .2px; text-transform: uppercase }
+.fi { width: 100%; background: var(--off); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 10px 13px; color: var(--ink); font-size: 13.5px; outline: none; transition: border .18s }
+.fi:focus { border-color: var(--ink2); background: var(--white) }
+.fi::placeholder { color: var(--ink4) }
+select.fi { cursor: pointer; appearance: none }
+textarea.fi { resize: vertical; min-height: 80px }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+.str-bar { height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 6px }
+.str-fill { height: 100%; border-radius: 2px; transition: width .3s, background .3s; width: 0 }
+.str-txt { font-size: 11px; color: var(--ink4); margin-top: 4px }
+.cb-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 14px }
+.custom-cb { width: 15px; height: 15px; min-width: 15px; border: 1.5px solid var(--line2); border-radius: 4px; appearance: none; background: var(--white); cursor: pointer; transition: all .18s; margin-top: 2px }
+.custom-cb:checked { background: var(--ink); border-color: var(--ink) }
+.cb-row label { font-size: 12px; color: var(--ink3); cursor: pointer; line-height: 1.6 }
+.cb-row a { color: var(--accent) }
+.btn-block { width: 100%; padding: 12px; font-size: 14px; border-radius: 50px; background: var(--ink); color: var(--white); font-weight: 600; border: none; transition: all .2s; font-family: 'Space Grotesk',sans-serif; letter-spacing: .2px }
+.btn-block:hover { background: var(--ink2) }
+.ferr { font-size: 11px; color: var(--red); margin-top: 4px; display: none }
+.demo-note { text-align: center; font-size: 11.5px; color: var(--ink4); margin-top: 14px; padding: 10px 12px; background: var(--off); border-radius: var(--r-sm); line-height: 1.6 }
+.demo-note strong { color: var(--accent) }
 
-/* KPI CARDS */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:28px}
-.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-.kpi-label{font-size:11.5px;color:var(--text2);margin-bottom:7px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
-.kpi-value{font-family:'Syne',sans-serif;font-size:27px;font-weight:800;letter-spacing:-1px}
-.kpi-value.gold{color:var(--gold)}
-.kpi-value.aqua{color:var(--aqua)}
-.kpi-value.rose{color:#c0392b}
-.kpi-sub{font-size:11px;color:var(--text2);margin-top:3px}
-.kpi-badge{display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:500;margin-top:6px}
-.kpi-badge.up{background:var(--aqua-light);color:var(--aqua);border:1px solid var(--aqua-mid)}
-.kpi-badge.warn{background:#fef9e7;color:#d68910;border:1px solid #f9e79f}
+/* Terms */
+.terms-scroll { max-height: 220px; overflow-y: auto; font-size: 13px; color: var(--ink3); line-height: 1.8; padding: 14px; background: var(--off); border-radius: var(--r-sm); margin-bottom: 14px; border: 1px solid var(--line) }
+.terms-scroll h4 { color: var(--ink); font-size: 12.5px; font-weight: 600; margin: 10px 0 4px; font-family: 'Space Grotesk',sans-serif }
 
-/* BOXES */
-.card-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px;box-shadow:var(--shadow)}
-.card-box h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+/* ============================================================
+   APP LAYOUT – Sidebar + Main
+============================================================ */
+#app { display: none; min-height: 100vh; background: var(--bg) }
+#app.active { display: flex }
 
-/* MY PLAN */
-.my-plan{background:linear-gradient(135deg,var(--bg2),var(--gold-light));border:1px solid var(--gold-mid);border-radius:var(--radius);padding:26px;margin-bottom:22px;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
-.my-plan::after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(184,136,60,.08),transparent 70%)}
-.my-plan h3{font-size:11px;color:var(--text2);font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;font-family:'DM Sans',sans-serif}
-.plan-display{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.plan-badge{padding:8px 20px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-.5px}
-.plan-meta{flex:1}
-.plan-meta h4{font-size:15px;font-weight:600;margin-bottom:3px}
-.plan-meta p{font-size:13px;color:var(--text2)}
-.plan-status{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--aqua);margin-top:6px;font-weight:500}
-.plan-status::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--aqua);animation:pulse 2s infinite}
-.plan-acts{display:flex;gap:8px;flex-wrap:wrap}
-.btn-sm{padding:8px 18px;border-radius:50px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.btn-sm.primary{background:var(--gold);color:#fff;border:none}
-.btn-sm.primary:hover{background:var(--gold2)}
-.btn-sm.ghost{background:transparent;border:1px solid var(--border2);color:var(--text2)}
-.btn-sm.ghost:hover{border-color:var(--gold);color:var(--gold)}
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-w); min-height: 100vh;
+  background: var(--white); border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; z-index: 100;
+  transition: transform .28s ease;
+}
+.sb-logo { padding: 22px 20px 16px; border-bottom: 1px solid var(--line) }
+.sb-logo h1 { font-family: 'Space Grotesk',sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -.5px; color: var(--ink) }
+.sb-logo h1 em { color: var(--accent); font-style: normal }
+.sb-logo p { font-size: 11px; color: var(--ink4); margin-top: 2px }
+.sb-user { padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px }
+.sb-av { width: 32px; height: 32px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--white); flex-shrink: 0 }
+.sb-uname { font-size: 13px; font-weight: 500; color: var(--ink) }
+.sb-role { font-size: 11px; color: var(--ink4); margin-top: 1px }
+.sb-nav { flex: 1; padding: 12px 10px; overflow-y: auto }
+.sb-section-label { font-size: 10px; font-weight: 600; color: var(--ink4); letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 10px 4px }
+.sb-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 400; color: var(--ink3);
+  cursor: pointer; transition: all .18s; position: relative; border: none; background: none; width: 100%; text-align: left;
+}
+.sb-item:hover { background: var(--off); color: var(--ink) }
+.sb-item.active { background: var(--accent-light); color: var(--accent); font-weight: 500 }
+.sb-item .sb-ico { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0 }
+.sb-badge { margin-left: auto; min-width: 18px; height: 18px; border-radius: 50px; background: var(--accent); color: var(--white); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 5px }
+.sb-footer { padding: 14px 10px; border-top: 1px solid var(--line) }
+.sb-logout { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--r-sm); font-size: 13px; color: var(--ink3); cursor: pointer; transition: all .18s; background: none; border: none; width: 100%; text-align: left }
+.sb-logout:hover { background: var(--red-light); color: var(--red) }
 
-/* TABLE */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:9px 13px;color:var(--text2);font-weight:500;font-size:11px;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--bg3)}
-td{padding:12px 13px;border-bottom:1px solid rgba(0,0,0,.04);color:var(--ink)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--gold-light)}
-.pill{padding:3px 10px;border-radius:50px;font-size:11px;font-weight:500}
-.pill.ok{background:var(--aqua-light);color:var(--aqua);border:1px solid var(--aqua-mid)}
-.pill.pend{background:#fef9e7;color:#d68910;border:1px solid #f9e79f}
-.pill.rej{background:#fdedec;color:#c0392b;border:1px solid #f5b7b1}
-.act-btn{padding:4px 11px;border-radius:50px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;border:1px solid}
-.act-btn.ok{border-color:var(--aqua-mid);color:var(--aqua);background:var(--aqua-light)}
-.act-btn.ok:hover{background:var(--aqua-mid)}
-.act-btn.rej{border-color:#f5b7b1;color:#c0392b;background:#fdedec}
-.act-btn.rej:hover{background:#f5b7b1}
-.act-btn.dl{border-color:var(--border2);color:var(--text2);background:transparent}
-.act-btn.dl:hover{border-color:var(--gold);color:var(--gold)}
+/* Main content area */
+.main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh }
+.top-bar { height: 58px; background: var(--white); border-bottom: 1px solid var(--line); padding: 0 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50 }
+.top-bar h2 { font-family: 'Space Grotesk',sans-serif; font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: -.3px }
+.top-bar-right { display: flex; align-items: center; gap: 10px }
+.notif-btn { position: relative; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--off); display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; color: var(--ink2) }
+.notif-pip { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); border: 1.5px solid var(--white) }
+.page-inner { padding: 24px 28px; max-width: 1200px }
 
-/* ALERTS */
-.alert-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.alert-item{background:var(--bg2);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:13px 16px;display:flex;align-items:center;gap:12px;font-size:13px;box-shadow:var(--shadow);border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
-.alert-item.danger{border-left-color:#c0392b}
-.alert-item.info{border-left-color:var(--aqua)}
-.alert-icon{font-size:16px;flex-shrink:0}
-.alert-body{flex:1}
-.alert-body strong{display:block;margin-bottom:2px;font-size:13px}
-.alert-body small{font-size:11.5px;color:var(--text2)}
+/* ── KPI Cards ── */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 14px; margin-bottom: 24px }
+.kpi-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; transition: all .2s }
+.kpi-card:hover { box-shadow: var(--shadow) }
+.kpi-lbl { font-size: 11px; color: var(--ink4); font-weight: 500; letter-spacing: .3px; text-transform: uppercase; margin-bottom: 8px }
+.kpi-val { font-family: 'Space Grotesk',sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -1px; color: var(--ink) }
+.kpi-val.gr { color: var(--accent) }
+.kpi-val.am { color: var(--amber) }
+.kpi-sub { font-size: 11px; color: var(--ink4); margin-top: 4px }
+.kpi-pill { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 50px; font-size: 10px; font-weight: 500; margin-top: 6px }
+.kpi-pill.up { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-mid) }
+.kpi-pill.warn { background: var(--amber-light); color: var(--amber); border: 1px solid #fcd34d }
 
-/* INVENTORY */
-.inv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
-.inv-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .28s;box-shadow:var(--shadow)}
-.inv-card:hover{border-color:var(--gold-mid);transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.inv-icon{font-size:26px;margin-bottom:8px}
-.inv-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px}
-.inv-count{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--gold);margin-bottom:2px;line-height:1}
-.inv-sub{font-size:11px;color:var(--text2)}
-.inv-low{font-size:11px;color:#c0392b;font-weight:500}
-.inv-ctrls{display:flex;justify-content:center;gap:8px;margin-top:10px}
-.inv-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:14px;transition:all .2s;display:flex;align-items:center;justify-content:center;font-weight:600}
-.inv-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-light)}
+/* ── Box / Card ── */
+.box { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 22px; margin-bottom: 18px }
+.box-hd { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px }
+.box-hd h3 { font-family: 'Space Grotesk',sans-serif; font-size: 15px; font-weight: 600; color: var(--ink) }
+.box-hd span { font-size: 12px; color: var(--ink4); font-weight: 400 }
 
-/* CHARTS */
-.charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:20px}
-@media(max-width:700px){.charts-grid{grid-template-columns:1fr}}
-.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
-.chart-card h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
-.chart-sub{font-size:12px;color:var(--text2);margin-bottom:18px}
-.proj-num{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--gold);letter-spacing:-1.5px;margin:8px 0 4px}
-.proj-lbl{font-size:12px;color:var(--text2)}
-.proj-trend{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:50px;background:var(--aqua-light);color:var(--aqua);font-size:11px;font-weight:600;margin-top:8px;border:1px solid var(--aqua-mid)}
+/* ── Table ── */
+.tw { overflow-x: auto }
+table { width: 100%; border-collapse: collapse }
+th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 500; color: var(--ink4); letter-spacing: .5px; text-transform: uppercase; border-bottom: 1px solid var(--line); background: var(--off) }
+td { padding: 11px 12px; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--ink) }
+td:last-child { white-space: nowrap }
+tr:last-child td { border-bottom: none }
+tr:hover td { background: var(--off) }
 
-/* Q&A */
-.qa-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
-.qa-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
-.qa-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.qa-user-info{flex:1}
-.qa-uname{font-size:13px;font-weight:600;margin-bottom:1px}
-.qa-date{font-size:11px;color:var(--text2)}
-.qa-status{padding:2px 9px;border-radius:50px;font-size:10px;font-weight:600;flex-shrink:0}
-.qa-status.open{background:#fef9e7;color:#d68910;border:1px solid #f9e79f}
-.qa-status.answered{background:var(--aqua-light);color:var(--aqua);border:1px solid var(--aqua-mid)}
-.qa-q{font-size:14px;line-height:1.55;margin-bottom:10px}
-.qa-ans{padding:12px;background:var(--aqua-light);border-left:2px solid var(--aqua);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:13px;color:var(--text2);line-height:1.65}
-.qa-inp-area{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
-.qa-inp-area h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px}
-textarea.fi{resize:vertical;min-height:90px;border-radius:var(--radius-sm)}
+/* ── Pill ── */
+.pill { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 50px; font-size: 11px; font-weight: 500 }
+.pill-ok { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-mid) }
+.pill-warn { background: var(--amber-light); color: var(--amber); border: 1px solid #fcd34d }
+.pill-err { background: var(--red-light); color: var(--red); border: 1px solid #fecaca }
+.pill-gray { background: var(--off); color: var(--ink3); border: 1px solid var(--line2) }
 
-/* CONTENT EDITOR */
-.editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:700px){.editor-grid{grid-template-columns:1fr}}
+/* ── Action Buttons ── */
+.ab { padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 500; border: 1px solid; transition: all .18s; cursor: pointer }
+.ab-ok { border-color: var(--accent-mid); color: var(--accent); background: var(--accent-light) }
+.ab-ok:hover { background: var(--accent-mid) }
+.ab-err { border-color: #fecaca; color: var(--red); background: var(--red-light) }
+.ab-err:hover { background: #fecaca }
+.ab-gray { border-color: var(--line2); color: var(--ink3); background: transparent }
+.ab-gray:hover { border-color: var(--ink3); color: var(--ink) }
 
-/* USERS TABLE */
-.role-badge{padding:2px 9px;border-radius:50px;font-size:10px;font-weight:600}
-.role-badge.cliente{background:var(--gold-light);color:var(--gold);border:1px solid var(--gold-mid)}
-.role-badge.empresa{background:var(--aqua-light);color:var(--aqua);border:1px solid var(--aqua-mid)}
+/* ── My Plan ── */
+.my-plan-card {
+  background: var(--ink); border-radius: var(--r); padding: 24px;
+  color: var(--white); margin-bottom: 20px; position: relative; overflow: hidden;
+}
+.my-plan-card::after { content: ''; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,.03) }
+.my-plan-card h3 { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 12px; font-family: 'Inter',sans-serif }
+.my-plan-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap }
+.plan-pill-badge { padding: 8px 18px; border-radius: 50px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15); font-family: 'Space Grotesk',sans-serif; font-size: 18px; font-weight: 700; color: var(--white) }
+.plan-details { flex: 1 }
+.plan-details h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px }
+.plan-details p { font-size: 12px; color: rgba(255,255,255,.5) }
+.plan-online { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #6ee7b7; margin-top: 5px; font-weight: 500 }
+.plan-online::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #6ee7b7; animation: blink 2s infinite }
+.plan-card-acts { display: flex; gap: 8px; flex-wrap: wrap }
+.btn-sm { padding: 7px 16px; border-radius: 50px; font-size: 12px; font-weight: 500; border: none; transition: all .2s; cursor: pointer }
+.btn-sm-w { background: var(--white); color: var(--ink) }
+.btn-sm-w:hover { background: var(--bg) }
+.btn-sm-ghost { background: rgba(255,255,255,.1); color: var(--white); border: 1px solid rgba(255,255,255,.15) }
+.btn-sm-ghost:hover { background: rgba(255,255,255,.18) }
 
-/* AUDIT */
-.audit-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:12.5px}
-.audit-item:last-child{border-bottom:none}
-.audit-ico{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
-.audit-info{flex:1}
-.audit-action{font-weight:500;color:var(--ink);margin-bottom:1px}
-.audit-meta{font-size:11px;color:var(--text2)}
-.audit-time{font-size:11px;color:var(--text2);text-align:right;flex-shrink:0}
+/* ── Alerts ── */
+.alert-stack { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px }
+.alert-row { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 12px 14px; display: flex; align-items: center; gap: 12px; border-left: 3px solid var(--amber) }
+.alert-row.a-err { border-left-color: var(--red) }
+.alert-row.a-ok { border-left-color: var(--accent) }
+.alert-row.a-info { border-left-color: var(--ink3) }
+.alert-ico { font-size: 16px }
+.alert-body { flex: 1 }
+.alert-body strong { display: block; font-size: 13px; font-weight: 500; margin-bottom: 1px }
+.alert-body small { font-size: 11px; color: var(--ink4) }
 
-/* PAY FORM */
-.pay-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:560px){.pay-form-grid{grid-template-columns:1fr}}
-.span2{grid-column:1/-1}
+/* ── Inventory Cards ── */
+.inv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 12px; margin-bottom: 18px }
+.inv-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 16px; text-align: center; transition: all .25s }
+.inv-card:hover { border-color: var(--line2); transform: translateY(-2px); box-shadow: var(--shadow) }
+.inv-ico { font-size: 24px; margin-bottom: 8px }
+.inv-name { font-family: 'Space Grotesk',sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 4px }
+.inv-count { font-family: 'Space Grotesk',sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -1.5px; margin-bottom: 2px }
+.inv-count.low { color: var(--red) }
+.inv-count.ok { color: var(--accent) }
+.inv-sub { font-size: 11px; color: var(--ink4) }
+.inv-ctrls { display: flex; justify-content: center; gap: 8px; margin-top: 10px }
+.inv-btn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line); background: var(--off); color: var(--ink3); font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all .18s }
+.inv-btn:hover { border-color: var(--ink3); color: var(--ink) }
 
-/* TERMS MODAL */
-.terms-body{max-height:240px;overflow-y:auto;font-size:13px;color:var(--text2);line-height:1.8;padding:14px;background:var(--bg3);border-radius:var(--radius-sm);margin-bottom:14px}
-.terms-body h4{color:var(--gold);font-family:'Syne',sans-serif;font-size:13px;margin:10px 0 5px;font-weight:700}
+/* ── Charts ── */
+.charts-grid { display: grid; grid-template-columns: 7fr 4fr; gap: 16px; margin-bottom: 18px }
+@media(max-width:860px){ .charts-grid { grid-template-columns: 1fr } }
+.chart-box { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 22px }
+.chart-box h3 { font-family: 'Space Grotesk',sans-serif; font-size: 14px; font-weight: 600; margin-bottom: 2px }
+.chart-box p { font-size: 12px; color: var(--ink4); margin-bottom: 16px }
+.proj-big { font-family: 'Space Grotesk',sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -1.5px; color: var(--ink); margin: 8px 0 4px }
+.proj-lbl { font-size: 12px; color: var(--ink4) }
+.proj-up { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 50px; background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 600; border: 1px solid var(--accent-mid); margin-top: 8px }
 
-/* TOAST */
-.toast{position:fixed;bottom:22px;right:22px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 18px;font-size:13px;z-index:9999;transform:translateY(70px);opacity:0;transition:all .32s;max-width:280px;box-shadow:var(--shadow-lg)}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.success{border-left:3px solid var(--aqua)}
-.toast.error{border-left:3px solid #c0392b}
+/* ── Q&A ── */
+.qa-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; margin-bottom: 10px }
+.qa-hd { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px }
+.qa-av { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--white); flex-shrink: 0 }
+.qa-info { flex: 1 }
+.qa-info .uname { font-size: 13px; font-weight: 500 }
+.qa-info .udate { font-size: 11px; color: var(--ink4) }
+.qa-q { font-size: 13.5px; color: var(--ink); line-height: 1.55; margin-bottom: 8px }
+.qa-ans { padding: 10px 12px; background: var(--accent-light); border-left: 2px solid var(--accent); border-radius: 0 var(--r-sm) var(--r-sm) 0; font-size: 12.5px; color: var(--ink3); line-height: 1.6 }
 
-/* REGISTER PAYMENT FORM */
-.pay-method-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:14px}
-.pm-opt{border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 8px;text-align:center;cursor:pointer;transition:all .2s;font-size:12px;font-weight:500;color:var(--text2)}
-.pm-opt:hover,.pm-opt.sel{border-color:var(--gold);color:var(--gold);background:var(--gold-light)}
-.pm-opt .pm-icon{font-size:18px;margin-bottom:4px}
+/* ── User / Role ── */
+.role-badge { padding: 2px 8px; border-radius: 50px; font-size: 10px; font-weight: 600 }
+.role-badge.cliente { background: var(--off); color: var(--ink3); border: 1px solid var(--line2) }
+.role-badge.empresa { background: var(--ink); color: var(--white); border: 1px solid var(--ink) }
 
-/* MOBILE */
-.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);z-index:50;padding:8px 0 max(8px,env(safe-area-inset-bottom))}
-.mob-items{display:flex;justify-content:space-around}
-.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 10px;border:none;background:none;color:var(--text2);font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color .2s;position:relative}
-.mob-item.active,.mob-item:hover{color:var(--gold)}
-.mob-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* ── Payment method options ── */
+.pm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px,1fr)); gap: 8px; margin-bottom: 14px }
+.pm-opt { border: 1.5px solid var(--line); border-radius: var(--r-sm); padding: 10px 8px; text-align: center; cursor: pointer; transition: all .2s; font-size: 12px; font-weight: 500; color: var(--ink3) }
+.pm-opt:hover { border-color: var(--ink3); color: var(--ink) }
+.pm-opt.sel { border-color: var(--ink); color: var(--ink); background: var(--off) }
+.pm-ico { font-size: 18px; margin-bottom: 4px }
 
+/* ── Content editor ── */
+.editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+@media(max-width:680px){ .editor-grid { grid-template-columns: 1fr } }
+
+/* ── Audit ── */
+.audit-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px }
+.audit-row:last-child { border-bottom: none }
+.audit-ico { width: 28px; height: 28px; border-radius: 50%; background: var(--off); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0 }
+.audit-data { flex: 1 }
+.audit-data .action { font-weight: 500; margin-bottom: 1px }
+.audit-data .meta { font-size: 11px; color: var(--ink4) }
+.audit-time { font-size: 11px; color: var(--ink4); text-align: right }
+
+/* ── PRODUCTS CATALOG ── */
+.prod-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap }
+.prod-search { flex: 1; min-width: 180px; background: var(--white); border: 1px solid var(--line); border-radius: 50px; padding: 9px 16px; font-size: 13px; color: var(--ink); outline: none; transition: border .18s }
+.prod-search:focus { border-color: var(--ink2) }
+.prod-search::placeholder { color: var(--ink4) }
+.prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 14px }
+.prod-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; transition: all .25s }
+.prod-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--line2) }
+.prod-img { height: 140px; background: var(--off); display: flex; align-items: center; justify-content: center; font-size: 48px; border-bottom: 1px solid var(--line) }
+.prod-body { padding: 14px 16px }
+.prod-cat { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 5px }
+.prod-name { font-family: 'Space Grotesk',sans-serif; font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px }
+.prod-desc { font-size: 12px; color: var(--ink4); line-height: 1.5; margin-bottom: 10px }
+.prod-footer { display: flex; align-items: center; justify-content: space-between }
+.prod-price { font-family: 'Space Grotesk',sans-serif; font-size: 16px; font-weight: 700; color: var(--ink) }
+.prod-stock { font-size: 11px; padding: 2px 8px; border-radius: 50px }
+.prod-acts { display: flex; gap: 6px; margin-top: 10px }
+.prod-edit { flex: 1; padding: 7px; border-radius: var(--r-xs); border: 1px solid var(--line); background: var(--off); font-size: 12px; color: var(--ink3); transition: all .18s; text-align: center }
+.prod-edit:hover { border-color: var(--ink); color: var(--ink) }
+.prod-del { padding: 7px 10px; border-radius: var(--r-xs); border: 1px solid var(--line); background: var(--off); font-size: 12px; color: var(--red); transition: all .18s }
+.prod-del:hover { background: var(--red-light); border-color: #fecaca }
+
+/* ── Modal large (product form) ── */
+.modal-lg { max-width: 560px }
+.prod-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+@media(max-width:500px){ .prod-form-grid { grid-template-columns: 1fr } }
+.span2 { grid-column: 1/-1 }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 20px; right: 20px; background: var(--ink); border-radius: var(--r-sm); padding: 11px 18px; font-size: 13px; color: var(--white); z-index: 9999; transform: translateY(60px); opacity: 0; transition: all .3s; max-width: 260px; box-shadow: var(--shadow-lg) }
+.toast.show { transform: translateY(0); opacity: 1 }
+.toast.ok { background: var(--accent) }
+.toast.err { background: var(--red) }
+
+/* Mobile sidebar toggle */
+.mob-sb-toggle { display: none; position: fixed; bottom: 20px; left: 20px; z-index: 300; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--white); border: none; font-size: 18px; align-items: center; justify-content: center; box-shadow: var(--shadow-md) }
 @media(max-width:768px){
-  nav.main-nav{padding:0 20px}
-  .nav-links,.nav-acts .btn-ghost{display:none}
-  .hero{padding:100px 20px 60px}
-  .section{padding:60px 20px}
-  .stats-strip{flex-wrap:wrap}
-  .stat-item{min-width:120px}
-  .mob-nav{display:block}
-  .app-content{padding:20px 14px 80px}
-  .app-tabs{display:none}
-  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .sidebar { transform: translateX(-100%); z-index: 300 }
+  .sidebar.open { transform: translateX(0) }
+  .main { margin-left: 0 }
+  .mob-sb-toggle { display: flex }
+  .l-links, .l-acts .btn-line { display: none }
+  .page-inner { padding: 16px }
+  .kpi-row { grid-template-columns: repeat(2,1fr) }
+  .prod-grid { grid-template-columns: repeat(auto-fill, minmax(200px,1fr)) }
 }
-@media(max-width:400px){.kpi-grid{grid-template-columns:1fr}}
+@media(max-width:400px){ .kpi-row { grid-template-columns: 1fr } }
 </style>
 </head>
 <body>
 
-<!-- LANDING -->
+<!-- ============================================================
+     LANDING
+============================================================ -->
 <div id="landing" class="screen active">
-  <div class="grid-bg"></div>
-
-  <nav class="main-nav">
-    <div class="logo">Nexa<span>Link</span></div>
-    <ul class="nav-links">
-      <li><a onclick="scrollById('s-planes')">Planes</a></li>
-      <li><a onclick="scrollById('s-features')">Servicios</a></li>
-      <li><a onclick="scrollById('s-chat')">Soporte</a></li>
+  <nav class="l-nav">
+    <div class="l-logo">Nexa<em>Link</em></div>
+    <ul class="l-links">
+      <li><a onclick="scrollS('s-planes')">Planes</a></li>
+      <li><a onclick="scrollS('s-servicios')">Servicios</a></li>
+      <li><a onclick="scrollS('s-soporte')">Soporte</a></li>
     </ul>
-    <div class="nav-acts">
-      <button class="btn btn-ghost" onclick="openModal('login')">Iniciar Sesión</button>
-      <button class="btn btn-gold" onclick="openModal('register')">Comenzar →</button>
+    <div class="l-acts">
+      <button class="btn btn-line" onclick="openAuth('login')">Iniciar sesión</button>
+      <button class="btn btn-solid" onclick="openAuth('register')">Comenzar →</button>
     </div>
   </nav>
 
   <section class="hero">
-    <div>
-      <div class="hero-badge"><span class="bdot"></span> Tecnología Starlink disponible en tu zona</div>
-      <h1>Internet que<br><span class="hi">nunca te falla.</span></h1>
-      <p>Velocidades simétricas hasta 1 Gbps con la tecnología satelital más avanzada. Estabilidad garantizada para tu hogar o empresa.</p>
-      <div class="hero-acts">
-        <button class="btn btn-gold btn-lg" onclick="openModal('register')">Contratar Ahora</button>
-        <button class="btn-outline-lg" onclick="scrollById('s-planes')">Ver Planes</button>
+    <div class="hero-inner fade-up">
+      <div class="h-chip"><span class="h-dot"></span> Starlink Enterprise disponible</div>
+      <h1>Conectividad<br>que <span class="gr">nunca falla.</span></h1>
+      <p>Velocidades simétricas hasta 1 Gbps con tecnología satelital de última generación para hogares y empresas.</p>
+      <div class="hero-btns">
+        <button class="btn btn-solid btn-hero" onclick="openAuth('register')">Contratar ahora</button>
+        <button class="btn btn-line btn-hero" onclick="scrollS('s-planes')">Ver planes</button>
       </div>
     </div>
   </section>
 
-  <div class="stats-strip">
-    <div class="stat-item"><div class="stat-n">1 Gbps</div><div class="stat-l">Velocidad Máxima</div></div>
-    <div class="stat-item"><div class="stat-n">99.9%</div><div class="stat-l">Uptime Garantizado</div></div>
-    <div class="stat-item"><div class="stat-n">2,400+</div><div class="stat-l">Clientes Activos</div></div>
-    <div class="stat-item"><div class="stat-n">24/7</div><div class="stat-l">Soporte Técnico</div></div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-n">1 Gbps</div><div class="stat-l">Velocidad máxima</div></div>
+    <div class="stat-box"><div class="stat-n">99.9%</div><div class="stat-l">Uptime garantizado</div></div>
+    <div class="stat-box"><div class="stat-n">2,400+</div><div class="stat-l">Clientes activos</div></div>
+    <div class="stat-box"><div class="stat-n">24/7</div><div class="stat-l">Soporte técnico</div></div>
   </div>
 
-  <!-- PLANES -->
-  <section class="section" id="s-planes">
-    <div class="section-head">
-      <div class="s-tag">Nuestros Planes</div>
-      <h2 class="s-title">Elige tu velocidad ideal</h2>
-      <p class="s-sub">Sin límite de datos, IP fija y soporte 24/7 incluidos en todos los planes.</p>
+  <!-- Planes -->
+  <div class="l-section" id="s-planes">
+    <div class="sec-head">
+      <div class="sec-tag">Planes</div>
+      <h2 class="sec-title">Elige tu velocidad</h2>
+      <p class="sec-sub">Sin límite de datos, IP fija y soporte incluidos en todos los planes.</p>
     </div>
     <div class="plans-grid">
       <div class="plan-card">
-        <div class="plan-icon">⚡</div>
         <div class="plan-name">Básico</div>
-        <div class="plan-spd">Hasta 50 Mbps simétrico</div>
-        <div class="plan-price"><span class="cur">$</span><span class="amt">25</span><span class="per">/mes</span></div>
+        <div class="plan-spd">50 Mbps simétrico</div>
+        <div class="plan-price"><span class="plan-cur">$</span><span class="plan-amt">25</span><span class="plan-per">/mes</span></div>
         <ul class="plan-feats">
-          <li>50 Mbps descarga y subida</li>
-          <li>IP Fija incluida</li>
-          <li>Soporte por chat</li>
-          <li>Sin cortes — 99% uptime</li>
-          <li>Instalación gratuita</li>
+          <li class="plan-feat-item">50 Mbps descarga y subida</li>
+          <li class="plan-feat-item">IP fija incluida</li>
+          <li class="plan-feat-item">Soporte por chat</li>
+          <li class="plan-feat-item">99% uptime garantizado</li>
+          <li class="plan-feat-item">Instalación gratuita</li>
         </ul>
-        <button class="plan-btn" onclick="openModal('register')">Contratar Plan Básico</button>
+        <button class="plan-cta" onclick="openAuth('register')">Contratar Básico</button>
       </div>
-      <div class="plan-card featured">
-        <div class="pop-badge">POPULAR</div>
-        <div class="plan-icon">🚀</div>
+      <div class="plan-card feat">
+        <div class="pop-label">POPULAR</div>
         <div class="plan-name">Medio</div>
-        <div class="plan-spd">Hasta 200 Mbps simétrico</div>
-        <div class="plan-price"><span class="cur">$</span><span class="amt">45</span><span class="per">/mes</span></div>
+        <div class="plan-spd" style="color:#6ee7b7">200 Mbps simétrico</div>
+        <div class="plan-price"><span class="plan-cur">$</span><span class="plan-amt">45</span><span class="plan-per">/mes</span></div>
         <ul class="plan-feats">
-          <li>200 Mbps descarga y subida</li>
-          <li>IP Fija incluida</li>
-          <li>Soporte prioritario 24/7</li>
-          <li>99.5% uptime garantizado</li>
-          <li>Router WiFi 6 gratis</li>
-          <li>Monitoreo en tiempo real</li>
+          <li class="plan-feat-item">200 Mbps descarga y subida</li>
+          <li class="plan-feat-item">IP fija incluida</li>
+          <li class="plan-feat-item">Soporte prioritario 24/7</li>
+          <li class="plan-feat-item">99.5% uptime</li>
+          <li class="plan-feat-item">Router WiFi 6 gratis</li>
+          <li class="plan-feat-item">Panel de monitoreo</li>
         </ul>
-        <button class="plan-btn" onclick="openModal('register')">Contratar Plan Medio</button>
+        <button class="plan-cta" onclick="openAuth('register')">Contratar Medio</button>
       </div>
       <div class="plan-card">
-        <div class="plan-icon">💎</div>
         <div class="plan-name">Plus</div>
-        <div class="plan-spd">Hasta 1 Gbps simétrico</div>
-        <div class="plan-price"><span class="cur">$</span><span class="amt">85</span><span class="per">/mes</span></div>
+        <div class="plan-spd">1 Gbps simétrico</div>
+        <div class="plan-price"><span class="plan-cur">$</span><span class="plan-amt">85</span><span class="plan-per">/mes</span></div>
         <ul class="plan-feats">
-          <li>1000 Mbps descarga y subida</li>
-          <li>IP Fija incluida</li>
-          <li>Soporte VIP dedicado</li>
-          <li>SLA 99.9% garantizado</li>
-          <li>Starlink Enterprise + base</li>
-          <li>Panel avanzado de gestión</li>
+          <li class="plan-feat-item">1000 Mbps descarga y subida</li>
+          <li class="plan-feat-item">IP fija dedicada</li>
+          <li class="plan-feat-item">Soporte VIP 24/7</li>
+          <li class="plan-feat-item">SLA 99.9% garantizado</li>
+          <li class="plan-feat-item">Starlink Enterprise + base</li>
+          <li class="plan-feat-item">Panel avanzado</li>
         </ul>
-        <button class="plan-btn" onclick="openModal('register')">Contratar Plan Plus</button>
+        <button class="plan-cta" onclick="openAuth('register')">Contratar Plus</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- SERVICIOS -->
-  <section class="section alt" id="s-features">
-    <div class="section-head">
-      <div class="s-tag">Por qué elegirnos</div>
-      <h2 class="s-title">Tecnología que marca la diferencia</h2>
+  <!-- Servicios -->
+  <div style="background:var(--off); padding: 1px 0" id="s-servicios">
+  <div class="l-section">
+    <div class="sec-head">
+      <div class="sec-tag">Servicios</div>
+      <h2 class="sec-title">¿Por qué NexaLink?</h2>
     </div>
     <div class="feat-grid">
-      <div class="feat-card"><div class="feat-icon">📡</div><div class="feat-title">Starlink Enterprise</div><div class="feat-text">Equipos satelitales de última generación con baja latencia disponibles en cualquier zona geográfica.</div></div>
-      <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-title">Conexión Segura</div><div class="feat-text">Cifrado avanzado y firewall empresarial incluidos en todos los planes sin costo adicional.</div></div>
-      <div class="feat-card"><div class="feat-icon">⚙️</div><div class="feat-title">Instalación Gratis</div><div class="feat-text">Técnicos certificados realizan la instalación en 48 horas, sin cargos ocultos ni sorpresas.</div></div>
-      <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Portal de Gestión</div><div class="feat-text">Monitorea tu consumo, gestiona pagos y contacta soporte desde tu panel personalizado.</div></div>
+      <div class="feat-box"><div class="feat-ico">📡</div><div class="feat-ttl">Starlink Enterprise</div><div class="feat-txt">Tecnología satelital de baja latencia disponible en cualquier zona, incluso rurales.</div></div>
+      <div class="feat-box"><div class="feat-ico">🔒</div><div class="feat-ttl">Conexión segura</div><div class="feat-txt">Cifrado avanzado y firewall empresarial incluidos sin costo adicional en todos los planes.</div></div>
+      <div class="feat-box"><div class="feat-ico">⚡</div><div class="feat-ttl">Instalación en 48h</div><div class="feat-txt">Técnicos certificados instalan en 48 horas sin cargos ocultos ni sorpresas.</div></div>
+      <div class="feat-box"><div class="feat-ico">📊</div><div class="feat-ttl">Portal inteligente</div><div class="feat-txt">Gestiona pagos, descarga recibos y reporta incidencias desde tu portal personal.</div></div>
     </div>
-  </section>
+  </div>
+  </div>
 
-  <!-- CHATBOX -->
-  <section class="section" id="s-chat">
-    <div class="section-head">
-      <div class="s-tag">Asistente Virtual</div>
-      <h2 class="s-title">¿Tienes preguntas?</h2>
-      <p class="s-sub">NexaBot responde al instante sobre planes, instalación y soporte.</p>
+  <!-- Chat FAQ -->
+  <div class="l-section" id="s-soporte">
+    <div class="sec-head">
+      <div class="sec-tag">Soporte</div>
+      <h2 class="sec-title">¿Tienes dudas?</h2>
+      <p class="sec-sub">NexaBot responde al instante sobre planes, pagos y cobertura.</p>
     </div>
     <div class="chatbox">
-      <div class="chat-head">
+      <div class="chat-hd">
         <div class="chat-av">NX</div>
-        <div class="chat-info"><h4>NexaBot</h4><p>En línea · Respuesta inmediata</p></div>
+        <div class="chat-meta"><h4>NexaBot</h4><p>En línea</p></div>
       </div>
       <div class="chat-msgs" id="chatMsgs">
-        <div class="msg bot">¡Hola! Soy NexaBot 👋 ¿En qué puedo ayudarte? Pregúntame sobre planes, instalación, pagos o cobertura.</div>
+        <div class="msg bot">¡Hola! Soy NexaBot 👋 Pregúntame sobre planes, instalación, pagos o cobertura.</div>
       </div>
       <div class="chat-chips">
         <span class="chip" onclick="faqSend('¿Cuánto cuesta la instalación?')">¿Costo instalación?</span>
-        <span class="chip" onclick="faqSend('¿Cuáles son los métodos de pago aceptados?')">Métodos de pago</span>
+        <span class="chip" onclick="faqSend('¿Cuáles son los métodos de pago?')">Métodos de pago</span>
         <span class="chip" onclick="faqSend('¿Tienen cobertura en mi zona?')">Cobertura</span>
         <span class="chip" onclick="faqSend('¿Cómo cancelo mi plan?')">Cancelación</span>
         <span class="chip" onclick="faqSend('¿Qué incluye el plan Plus?')">Plan Plus</span>
       </div>
       <div class="chat-inp-row">
         <input type="text" class="chat-inp" id="chatInp" placeholder="Escribe tu pregunta..." onkeypress="if(event.key==='Enter')sendChat()">
-        <button class="chat-send" onclick="sendChat()">➤</button>
+        <button class="chat-send" onclick="sendChat()">→</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <footer>
-    <strong>NexaLink</strong>
-    <p style="margin-top:8px">© 2025 NexaLink Internet Services · Todos los derechos reservados</p>
+  <footer class="l-footer">
+    <p>© 2025 NexaLink Internet Services. Todos los derechos reservados.</p>
     <div class="foot-links">
-      <a>Política de Privacidad</a>
-      <a onclick="openTermsModal()">Términos y Condiciones</a>
-      <a onclick="openModal('login')">Portal Clientes</a>
+      <a>Privacidad</a>
+      <a onclick="openTermsModal()">Términos</a>
+      <a onclick="openAuth('login')">Portal clientes</a>
     </div>
   </footer>
 </div>
 
-<!-- APP -->
-<div id="app" class="screen">
-  <nav class="app-nav">
-    <div class="app-logo" onclick="goLanding()">Nexa<span>Link</span></div>
-    <div class="app-tabs" id="appTabs"></div>
-    <div class="app-user">
-      <div class="uav" id="uav">U</div>
-      <span class="uname" id="uname">Usuario</span>
-      <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+<!-- ============================================================
+     APP
+============================================================ -->
+<div id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <h1>Nexa<em>Link</em></h1>
+      <p id="sb-role-label">Portal</p>
     </div>
-  </nav>
-  <div class="app-content" id="appContent"></div>
-  <div class="mob-nav" id="mobNav"></div>
+    <div class="sb-user">
+      <div class="sb-av" id="sb-av">U</div>
+      <div>
+        <div class="sb-uname" id="sb-uname">—</div>
+        <div class="sb-role" id="sb-role">—</div>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sbNav"></nav>
+    <div class="sb-footer">
+      <button class="sb-logout" onclick="logout()">⬅ Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="top-bar">
+      <h2 id="pageTitle">Dashboard</h2>
+      <div class="top-bar-right">
+        <div class="notif-btn" id="notifBtn">🔔<span class="notif-pip" id="notifPip" style="display:none"></span></div>
+        <button class="btn btn-accent" style="padding:7px 16px;font-size:12.5px" id="topActionBtn" onclick="topAction()">+ Acción</button>
+      </div>
+    </div>
+    <div class="page-inner" id="pageContent"></div>
+  </div>
 </div>
 
-<!-- AUTH MODAL -->
-<div class="overlay" id="authModal">
+<!-- Sidebar overlay mobile -->
+<button class="mob-sb-toggle" id="mobSbToggle" onclick="toggleSb()">☰</button>
+
+<!-- ============================================================
+     AUTH MODAL
+============================================================ -->
+<div class="overlay" id="authOverlay">
   <div class="modal">
-    <button class="modal-x" onclick="closeModal()">✕</button>
-    <div class="m-logo"><h2>Nexa<span>Link</span></h2><p id="mSub">Accede a tu portal</p></div>
+    <button class="modal-x" onclick="closeAuth()">✕</button>
+    <div class="m-logo">
+      <h2>Nexa<em>Link</em></h2>
+      <p id="mSub">Accede a tu portal</p>
+    </div>
     <div class="tabs">
-      <button class="tab active" id="tab-login" onclick="switchTab('login')">Iniciar Sesión</button>
+      <button class="tab active" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button>
       <button class="tab" id="tab-register" onclick="switchTab('register')">Registrarse</button>
     </div>
     <div id="mBody"></div>
   </div>
 </div>
 
-<!-- TERMS MODAL -->
-<div class="overlay" id="termsModal">
-  <div class="modal" style="max-width:500px">
-    <button class="modal-x" onclick="closeTermsModal()">✕</button>
-    <h3 style="font-family:'Syne',sans-serif;font-size:20px;margin-bottom:16px">Términos y Condiciones</h3>
-    <div class="terms-body">
-      <h4>1. Aceptación del Servicio</h4>
-      Al contratar cualquier plan de NexaLink, el cliente acepta quedar sujeto a los presentes Términos y Condiciones y a las políticas de uso aceptable vigentes.
-      <h4>2. Planes y Precios</h4>
-      Los precios están en dólares (USD). NexaLink puede actualizar tarifas con 30 días de antelación mediante notificación en el portal del cliente.
-      <h4>3. Métodos de Pago</h4>
-      Se aceptan: Zelle, Binance Pay, Transferencia Bancaria, Pago Móvil y efectivo. Todos los pagos deben registrarse en el portal y son confirmados por la empresa en 24 horas hábiles.
-      <h4>4. Vencimiento y Suspensión</h4>
-      El servicio es mensual. La falta de pago en los primeros 5 días hábiles puede conllevar la suspensión con 48 horas de preaviso.
-      <h4>5. Equipos</h4>
-      Los equipos Starlink, bases, conectores y cargadores suministrados permanecen siendo propiedad de NexaLink. El cliente es responsable de su custodia.
-      <h4>6. Garantía de Uptime</h4>
-      99% Plan Básico · 99.5% Plan Medio · 99.9% Plan Plus. Mantenimientos planificados serán notificados con antelación.
-      <h4>7. Privacidad</h4>
-      Los datos de conexión se usan solo para mejorar el servicio. No se comparte información personal sin consentimiento expreso.
-      <h4>8. Cancelación</h4>
-      Se requiere preaviso de 15 días mediante solicitud formal en el portal. No se hacen reembolsos por períodos parciales.
-    </div>
-    <button class="btn-block" onclick="closeTermsModal()">Entendido y Acepto</button>
+<!-- PRODUCT MODAL -->
+<div class="overlay" id="prodOverlay">
+  <div class="modal modal-lg">
+    <button class="modal-x" onclick="closeProdModal()">✕</button>
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;margin-bottom:20px" id="prodModalTitle">Nuevo Producto</h3>
+    <div id="prodModalBody"></div>
   </div>
 </div>
 
+<!-- TERMS MODAL -->
+<div class="overlay" id="termsOverlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeTermsModal()">✕</button>
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;margin-bottom:14px">Términos y Condiciones</h3>
+    <div class="terms-scroll">
+      <h4>1. Aceptación</h4>Al contratar cualquier plan de NexaLink el cliente acepta los presentes Términos y Condiciones y las políticas de uso aceptable vigentes.
+      <h4>2. Planes y Precios</h4>Los precios están en USD. NexaLink puede actualizar tarifas con 30 días de antelación mediante notificación en el portal.
+      <h4>3. Métodos de Pago</h4>Se aceptan: Zelle, Binance Pay, Transferencia Bancaria, Pago Móvil y Efectivo. Todos los pagos deben registrarse en el portal y son confirmados en 24h hábiles.
+      <h4>4. Vencimiento y Suspensión</h4>El servicio es mensual. La falta de pago en los primeros 5 días hábiles puede conllevar suspensión con 48h de preaviso.
+      <h4>5. Equipos</h4>Los equipos suministrados permanecen siendo propiedad de NexaLink. El cliente es responsable de su custodia.
+      <h4>6. Garantía de Uptime</h4>99% Plan Básico · 99.5% Plan Medio · 99.9% Plan Plus.
+      <h4>7. Privacidad</h4>Los datos de conexión se usan solo para mejorar el servicio y no se comparten con terceros.
+      <h4>8. Cancelación</h4>Preaviso de 15 días. No hay reembolsos por períodos parciales.
+    </div>
+    <button class="btn-block" onclick="closeTermsModal()">Entendido y acepto</button>
+  </div>
+</div>
+
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
-// DATA
+// DATABASE
 // ============================================================
 const DB = {
   users: [
-    {id:1,name:'Admin NexaLink',email:'admin@nexalink.com',pass:'Admin@123',role:'empresa',plan:'empresa',av:'AD',joined:'2024-01-01',active:true},
+    {id:1,name:'Admin NexaLink',email:'admin@nexalink.com',pass:'Admin@123',role:'empresa',plan:'empresa',av:'AN',joined:'2024-01-01',active:true},
     {id:2,name:'Carlos Mendoza',email:'carlos@demo.com',pass:'Carlos@123',role:'cliente',plan:'Medio',av:'CM',joined:'2025-01-15',active:true},
     {id:3,name:'María González',email:'maria@demo.com',pass:'Maria@123',role:'cliente',plan:'Plus',av:'MG',joined:'2025-02-03',active:true},
   ],
@@ -569,13 +713,21 @@ const DB = {
     {id:5,uid:3,user:'María González',month:'Marzo 2025',amount:85,method:'Zelle',ref:'ZLL-7761',status:'confirmed',date:'2025-03-02',plan:'Plus'},
   ],
   inventory: [
-    {name:'Starlinks',icon:'📡',count:12,min:3},
-    {name:'Bases',icon:'🔧',count:28,min:5},
-    {name:'Conectores',icon:'🔌',count:85,min:10},
-    {name:'Cargadores',icon:'⚡',count:31,min:8},
+    {id:1,name:'Starlinks',icon:'📡',count:12,min:3},
+    {id:2,name:'Bases',icon:'🔧',count:28,min:5},
+    {id:3,name:'Conectores',icon:'🔌',count:85,min:10},
+    {id:4,name:'Cargadores',icon:'⚡',count:31,min:8},
+  ],
+  products: [
+    {id:1,name:'Starlink Gen 3',category:'Antenas',price:350,stock:8,desc:'Kit Starlink generación 3 con antena plana y router incluido. Alta velocidad satelital.',icon:'📡',sku:'SLK-G3-001',minStock:2},
+    {id:2,name:'Base de Montaje Pro',category:'Accesorios',price:45,stock:24,desc:'Base de montaje resistente para techo o pared. Acero inoxidable con recubrimiento UV.',icon:'🔧',sku:'BASE-PRO-002',minStock:5},
+    {id:3,name:'Conector RJ45 Cat6',category:'Conectores',price:8,stock:200,desc:'Pack de 50 conectores RJ45 Cat6 blindados. Compatibles con todos los modelos.',icon:'🔌',sku:'CON-CAT6-003',minStock:20},
+    {id:4,name:'Cargador 65W GaN',category:'Energía',price:35,stock:42,desc:'Cargador ultracompacto GaN de 65W compatible con todos los equipos Starlink.',icon:'⚡',sku:'CAR-GAN-004',minStock:8},
+    {id:5,name:'Cable Ethernet 20m',category:'Cables',price:22,stock:65,desc:'Cable Cat6 en espiral de 20 metros, resistente a la intemperie. Negro mate.',icon:'🌐',sku:'CAB-CAT6-005',minStock:10},
+    {id:6,name:'Router WiFi 6 Mesh',category:'Redes',price:120,stock:15,desc:'Router mesh WiFi 6 de doble banda, cobertura hasta 200m². Incluye 2 satélites.',icon:'📶',sku:'RTR-W6M-006',minStock:3},
   ],
   questions: [
-    {id:1,uid:2,user:'Carlos Mendoza',av:'CM',q:'¿Cuándo estará disponible el plan 2Gbps?',date:'2025-04-01',status:'answered',a:'Estamos trabajando en expandir nuestra capacidad. El plan 2Gbps estará disponible en Q3 2025.'},
+    {id:1,uid:2,user:'Carlos Mendoza',av:'CM',q:'¿Cuándo estará disponible el plan 2Gbps?',date:'2025-04-01',status:'answered',a:'Estamos ampliando capacidad. El plan 2Gbps estará en Q3 2025.'},
     {id:2,uid:3,user:'María González',av:'MG',q:'¿Puedo cambiar mi método de pago cada mes?',date:'2025-04-05',status:'open',a:''},
     {id:3,uid:2,user:'Carlos Mendoza',av:'CM',q:'¿El router WiFi 6 está incluido en el plan Medio?',date:'2025-04-06',status:'open',a:''},
   ],
@@ -584,73 +736,56 @@ const DB = {
     'Medio':{speed:'200 Mbps',price:45},
     'Plus':{speed:'1 Gbps',price:85},
   },
-  contentHome:{
-    hero:'Internet que nunca te falla.',
-    heroSub:'Velocidades simétricas hasta 1 Gbps con tecnología Starlink.',
-    basicPrice:'25',medioPrice:'45',plusPrice:'85',
-    basicSpeed:'50 Mbps',medioSpeed:'200 Mbps',plusSpeed:'1 Gbps',
-  },
+  contentHome:{hero:'Conectividad que nunca falla.',heroSub:'Velocidades simétricas hasta 1 Gbps.',basicPrice:'25',medioPrice:'45',plusPrice:'85',basicSpeed:'50 Mbps',medioSpeed:'200 Mbps',plusSpeed:'1 Gbps'},
   audit:[
     {action:'Login exitoso',user:'carlos@demo.com',ip:'192.168.1.10',device:'Chrome / Windows',time:'Hoy 09:32'},
     {action:'Pago registrado $45',user:'carlos@demo.com',ip:'192.168.1.10',device:'Chrome / Windows',time:'Hoy 09:35'},
     {action:'Login exitoso',user:'admin@nexalink.com',ip:'10.0.0.2',device:'Firefox / macOS',time:'Hoy 08:10'},
-    {action:'Plan confirmado – Carlos Mendoza',user:'admin@nexalink.com',ip:'10.0.0.2',device:'Firefox / macOS',time:'Hoy 08:22'},
+    {action:'Pago confirmado #1 – Carlos Mendoza',user:'admin@nexalink.com',ip:'10.0.0.2',device:'Firefox / macOS',time:'Hoy 08:22'},
   ]
 };
 
-let CU = null; // current user
-let chartInst = null;
+let CU = null;
+let chartInst1 = null, chartInst2 = null;
+let selMethod = '';
+let editingProdId = null;
+let prodFilter = 'Todos';
 
 // ============================================================
 // LANDING HELPERS
 // ============================================================
-function scrollById(id){
-  const el=document.getElementById(id);
-  if(el)el.scrollIntoView({behavior:'smooth'});
-}
+function scrollS(id){ const el=document.getElementById(id); if(el)el.scrollIntoView({behavior:'smooth'}) }
 
 const FAQ = {
-  '¿cuánto cuesta la instalación?':'¡La instalación es completamente gratuita! 🎉 Un técnico certificado visita tu domicilio en un plazo de 48 horas tras contratar.',
-  '¿cuáles son los métodos de pago aceptados?':'Aceptamos: 💛 Zelle, 🔶 Binance Pay, 🏦 Transferencia Bancaria, 📱 Pago Móvil y 💵 Efectivo. Todos los pagos se registran en tu portal de cliente.',
-  '¿tienen cobertura en mi zona?':'Tenemos cobertura con tecnología Starlink en toda la región. Puedes verificar disponibilidad exacta en tu dirección contactando a nuestro equipo de ventas.',
-  '¿cómo cancelo mi plan?':'Puedes solicitar la cancelación desde tu portal de cliente con 15 días de antelación. No hay penalización por cancelación anticipada.',
-  '¿qué incluye el plan plus?':'El Plan Plus incluye: 1 Gbps simétrico, IP fija, soporte VIP dedicado 24/7, SLA 99.9%, equipo Starlink Enterprise + base premium y panel de gestión avanzado. Todo por $85/mes.',
+  'instalación':'La instalación es completamente gratuita 🎉 Un técnico certificado visita tu domicilio en 48 horas tras contratar.',
+  'métodos de pago':'Aceptamos: 💛 Zelle, 🔶 Binance Pay, 🏦 Transferencia Bancaria, 📱 Pago Móvil y 💵 Efectivo. Todos se registran en tu portal.',
+  'cobertura':'Tenemos cobertura con Starlink en toda la región. Consulta disponibilidad exacta en tu dirección con nuestro equipo de ventas.',
+  'canc':'Puedes cancelar desde tu portal con 15 días de antelación. Sin penalización.',
+  'plus':'Plan Plus: 1 Gbps simétrico, IP fija, soporte VIP 24/7, SLA 99.9%, Starlink Enterprise + base premium. $85/mes.',
 };
-
 function faqSend(q){
-  addChatMsg(q,'user');
+  addMsg(q,'user');
   setTimeout(()=>{
     const k=q.toLowerCase();
-    const ans=Object.keys(FAQ).find(f=>k.includes(f.slice(0,12).toLowerCase()));
-    addChatMsg(ans?FAQ[ans]:'Gracias por tu pregunta. Un agente de NexaLink te responderá pronto. También puedes llamarnos al +58 412 000 0000.','bot');
-  },700);
+    let ans='Gracias por tu pregunta. Un agente de NexaLink te responderá pronto.';
+    if(k.includes('instal'))ans=FAQ['instalación'];
+    else if(k.includes('pago'))ans=FAQ['métodos de pago'];
+    else if(k.includes('cobert'))ans=FAQ['cobertura'];
+    else if(k.includes('cancel'))ans=FAQ['canc'];
+    else if(k.includes('plus'))ans=FAQ['plus'];
+    addMsg(ans,'bot');
+  },650);
 }
-function sendChat(){
-  const inp=document.getElementById('chatInp');
-  const v=inp.value.trim();
-  if(!v)return;
-  inp.value='';
-  faqSend(v);
-}
-function addChatMsg(txt,who){
-  const c=document.getElementById('chatMsgs');
-  const d=document.createElement('div');
-  d.className='msg '+who;
-  d.textContent=txt;
-  c.appendChild(d);
-  c.scrollTop=c.scrollHeight;
-}
+function sendChat(){const i=document.getElementById('chatInp');const v=i.value.trim();if(!v)return;i.value='';faqSend(v);}
+function addMsg(txt,who){const c=document.getElementById('chatMsgs');const d=document.createElement('div');d.className='msg '+who;d.textContent=txt;c.appendChild(d);c.scrollTop=c.scrollHeight;}
 
 // ============================================================
 // AUTH
 // ============================================================
-function openModal(mode){
-  document.getElementById('authModal').classList.add('open');
-  switchTab(mode);
-}
-function closeModal(){document.getElementById('authModal').classList.remove('open')}
-function openTermsModal(){document.getElementById('termsModal').classList.add('open')}
-function closeTermsModal(){document.getElementById('termsModal').classList.remove('open')}
+function openAuth(mode){document.getElementById('authOverlay').classList.add('open');switchTab(mode);}
+function closeAuth(){document.getElementById('authOverlay').classList.remove('open');}
+function openTermsModal(){document.getElementById('termsOverlay').classList.add('open');}
+function closeTermsModal(){document.getElementById('termsOverlay').classList.remove('open');}
 
 function switchTab(mode){
   document.getElementById('tab-login').classList.toggle('active',mode==='login');
@@ -660,81 +795,59 @@ function switchTab(mode){
 }
 
 function loginForm(){return`
-<div class="fg"><label class="fl">Correo Electrónico</label><input type="email" class="fi" id="lEmail" placeholder="correo@ejemplo.com"></div>
-<div class="fg"><label class="fl">Contraseña</label><input type="password" class="fi" id="lPass" placeholder="••••••••" onkeypress="if(event.key==='Enter')doLogin()"><div id="lErr" class="ferr">Credenciales incorrectas. Intenta de nuevo.</div></div>
-<button class="btn-block" onclick="doLogin()" style="margin-top:8px">Iniciar Sesión</button>
-<div class="demo-hint">
-  <strong>Demo Cliente:</strong> carlos@demo.com / Carlos@123<br>
-  <em>Demo Empresa:</em> admin@nexalink.com / Admin@123
-</div>`}
+<div class="fg"><label class="fl">Correo</label><input type="email" class="fi" id="lE" placeholder="correo@ejemplo.com"></div>
+<div class="fg"><label class="fl">Contraseña</label><input type="password" class="fi" id="lP" placeholder="••••••••" onkeypress="if(event.key==='Enter')doLogin()"><div class="ferr" id="lErr">Credenciales incorrectas.</div></div>
+<button class="btn-block" onclick="doLogin()" style="margin-top:4px">Iniciar sesión</button>
+<div class="demo-note"><strong>Demo:</strong> carlos@demo.com / Carlos@123<br>Empresa: admin@nexalink.com / Admin@123</div>`;}
 
 function registerForm(){return`
 <div class="frow">
-  <div class="fg"><label class="fl">Nombre</label><input type="text" class="fi" id="rNombre" placeholder="Juan"></div>
-  <div class="fg"><label class="fl">Apellido</label><input type="text" class="fi" id="rApellido" placeholder="Pérez"></div>
+  <div class="fg"><label class="fl">Nombre</label><input type="text" class="fi" id="rN" placeholder="Juan"></div>
+  <div class="fg"><label class="fl">Apellido</label><input type="text" class="fi" id="rA" placeholder="Pérez"></div>
 </div>
-<div class="fg"><label class="fl">Correo Electrónico</label><input type="email" class="fi" id="rEmail" placeholder="correo@ejemplo.com"></div>
-<div class="fg"><label class="fl">Teléfono</label><input type="tel" class="fi" id="rTel" placeholder="+58 412 000 0000"></div>
-<div class="fg"><label class="fl">Plan de Interés</label>
-<select class="fi" id="rPlan">
-  <option value="Básico">Básico – $25/mes (50 Mbps)</option>
-  <option value="Medio" selected>Medio – $45/mes (200 Mbps)</option>
-  <option value="Plus">Plus – $85/mes (1 Gbps)</option>
-</select></div>
-<div class="fg"><label class="fl">Contraseña</label><input type="password" class="fi" id="rPass" placeholder="Mínimo 8 caracteres" oninput="chkStr(this.value)">
-<div class="str-bar"><div class="str-fill" id="strFill"></div></div>
-<div class="str-txt" id="strTxt">Escribe tu contraseña</div></div>
-<div class="fg"><label class="fl">Confirmar Contraseña</label><input type="password" class="fi" id="rPass2" placeholder="Repite tu contraseña"></div>
-<div class="cb-row"><input type="checkbox" class="custom-cb" id="cbTerms"><label for="cbTerms">Acepto los <a onclick="openTermsModal()" style="color:var(--gold);cursor:pointer">Términos y Condiciones</a> y la Política de Privacidad</label></div>
-<button class="btn-block" onclick="doRegister()">Crear Cuenta</button>`}
+<div class="fg"><label class="fl">Correo</label><input type="email" class="fi" id="rE" placeholder="correo@ejemplo.com"></div>
+<div class="fg"><label class="fl">Teléfono</label><input type="tel" class="fi" id="rT" placeholder="+58 412 000 0000"></div>
+<div class="fg"><label class="fl">Plan</label>
+<select class="fi" id="rPl"><option value="Básico">Básico – $25/mes (50 Mbps)</option><option value="Medio" selected>Medio – $45/mes (200 Mbps)</option><option value="Plus">Plus – $85/mes (1 Gbps)</option></select></div>
+<div class="fg"><label class="fl">Contraseña</label><input type="password" class="fi" id="rP" placeholder="Mínimo 8 caracteres" oninput="chkStr(this.value)">
+<div class="str-bar"><div class="str-fill" id="sF"></div></div><div class="str-txt" id="sT">Escribe tu contraseña</div></div>
+<div class="fg"><label class="fl">Confirmar contraseña</label><input type="password" class="fi" id="rP2" placeholder="Repite tu contraseña"></div>
+<div class="cb-row"><input type="checkbox" class="custom-cb" id="cbT"><label for="cbT">Acepto los <a onclick="openTermsModal()">Términos y Condiciones</a> y la Política de Privacidad</label></div>
+<button class="btn-block" onclick="doRegister()">Crear cuenta</button>`;}
 
 function chkStr(v){
-  let s=0;
-  if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^a-zA-Z0-9]/.test(v))s++;
-  const f=document.getElementById('strFill');const t=document.getElementById('strTxt');if(!f)return;
-  const cols=['#c0392b','#d68910','var(--gold)','var(--aqua)'];
-  const lbls=['Muy débil','Regular','Buena','Excelente'];
-  f.style.width=(s*25)+'%';f.style.background=cols[s-1]||'transparent';
-  t.textContent=s>0?lbls[s-1]:'Escribe tu contraseña';
+  let s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^a-zA-Z0-9]/.test(v))s++;
+  const f=document.getElementById('sF'),t=document.getElementById('sT');if(!f)return;
+  const cols=['#991b1b','#92400e','#2d6a4f','#1a5c42'];const lbls=['Muy débil','Regular','Buena','Excelente'];
+  f.style.width=(s*25)+'%';f.style.background=cols[s-1]||'transparent';t.textContent=s>0?lbls[s-1]:'Escribe tu contraseña';
 }
 
 function doLogin(){
-  const e=document.getElementById('lEmail').value.trim();
-  const p=document.getElementById('lPass').value;
+  const e=document.getElementById('lE').value.trim(),p=document.getElementById('lP').value;
   const u=DB.users.find(x=>x.email===e&&x.pass===p&&x.active);
   if(!u){document.getElementById('lErr').style.display='block';return;}
-  CU=u;
-  DB.audit.unshift({action:'Login exitoso',user:e,ip:'192.168.'+Math.floor(Math.random()*9+1)+'.'+Math.floor(Math.random()*200+10),device:navigator.userAgent.includes('Firefox')?'Firefox':'Chrome'+' / '+navigator.platform.slice(0,10),time:'Ahora'});
-  closeModal();
-  launchApp();
+  CU=u;addAudit('Login exitoso',e);closeAuth();launchApp();
 }
 
 function doRegister(){
-  const nombre=document.getElementById('rNombre')?.value.trim();
-  const apellido=document.getElementById('rApellido')?.value.trim();
-  const email=document.getElementById('rEmail')?.value.trim();
-  const pass=document.getElementById('rPass')?.value;
-  const pass2=document.getElementById('rPass2')?.value;
-  const terms=document.getElementById('cbTerms')?.checked;
-  const plan=document.getElementById('rPlan')?.value||'Medio';
-  if(!nombre||!apellido||!email){showToast('Completa todos los campos obligatorios','error');return;}
-  if(pass.length<8){showToast('La contraseña debe tener al menos 8 caracteres','error');return;}
-  if(pass!==pass2){showToast('Las contraseñas no coinciden','error');return;}
-  if(!terms){showToast('Debes aceptar los Términos y Condiciones','error');return;}
-  if(DB.users.find(u=>u.email===email)){showToast('Ya existe una cuenta con ese correo','error');return;}
-  const av=(nombre[0]+apellido[0]).toUpperCase();
-  const nu={id:DB.users.length+1,name:`${nombre} ${apellido}`,email,pass,role:'cliente',plan,av,joined:new Date().toISOString().slice(0,10),active:true};
-  DB.users.push(nu);
-  DB.audit.unshift({action:'Registro nuevo usuario',user:email,ip:'0.0.0.0',device:'Web',time:'Ahora'});
-  CU=nu;closeModal();launchApp();
-  showToast('¡Cuenta creada exitosamente!','success');
+  const n=document.getElementById('rN')?.value.trim(),a=document.getElementById('rA')?.value.trim();
+  const e=document.getElementById('rE')?.value.trim(),p=document.getElementById('rP')?.value;
+  const p2=document.getElementById('rP2')?.value,terms=document.getElementById('cbT')?.checked;
+  const plan=document.getElementById('rPl')?.value||'Medio';
+  if(!n||!a||!e){toast('Completa todos los campos','err');return;}
+  if(p.length<8){toast('Contraseña mínimo 8 caracteres','err');return;}
+  if(p!==p2){toast('Las contraseñas no coinciden','err');return;}
+  if(!terms){toast('Debes aceptar los Términos y Condiciones','err');return;}
+  if(DB.users.find(u=>u.email===e)){toast('Ya existe una cuenta con ese correo','err');return;}
+  const nu={id:DB.users.length+1,name:`${n} ${a}`,email:e,pass:p,role:'cliente',plan,av:(n[0]+a[0]).toUpperCase(),joined:new Date().toISOString().slice(0,10),active:true};
+  DB.users.push(nu);addAudit('Nuevo registro',e);CU=nu;closeAuth();launchApp();toast('¡Cuenta creada!','ok');
 }
 
 function logout(){
-  CU=null;
-  document.getElementById('landing').classList.add('active');
+  CU=null;destroyCharts();
   document.getElementById('app').classList.remove('active');
-  if(chartInst){chartInst.destroy();chartInst=null;}
+  document.getElementById('landing').classList.add('active');
+  document.querySelector('.screen#landing').style.display='block';
 }
 function goLanding(){logout();}
 
@@ -744,253 +857,372 @@ function goLanding(){logout();}
 function launchApp(){
   document.getElementById('landing').classList.remove('active');
   document.getElementById('app').classList.add('active');
-  document.getElementById('uav').textContent=CU.av;
-  document.getElementById('uname').textContent=CU.name;
-  buildTabs();
-  if(chartInst){chartInst.destroy();chartInst=null;}
-  loadTab('dashboard');
+  document.getElementById('sb-av').textContent=CU.av;
+  document.getElementById('sb-uname').textContent=CU.name;
+  document.getElementById('sb-role').textContent=CU.role==='empresa'?'Administrador':'Cliente';
+  document.getElementById('sb-role-label').textContent=CU.role==='empresa'?'Panel Empresa':'Portal Cliente';
+  const pending=DB.payments.filter(p=>p.status==='pending').length;
+  const pip=document.getElementById('notifPip');
+  if(pip)pip.style.display=pending>0?'block':'none';
+  buildSidebar();
+  loadPage('dashboard');
 }
 
-const TABS_EMPRESA = [
-  {id:'dashboard',label:'Dashboard',icon:'▦'},
-  {id:'pagos',label:'Pagos',icon:'💳', notif:true},
-  {id:'inventario',label:'Inventario',icon:'📦'},
-  {id:'analitica',label:'Analítica',icon:'📈'},
-  {id:'usuarios',label:'Usuarios',icon:'👥'},
-  {id:'preguntas',label:'Preguntas',icon:'💬',notif:true},
-  {id:'contenido',label:'Contenido',icon:'✏️'},
-  {id:'auditoria',label:'Auditoría',icon:'🔍'},
+const NAV_EMPRESA = [
+  {id:'dashboard',label:'Dashboard',ico:'▦',section:'Principal'},
+  {id:'pagos',label:'Pagos',ico:'💳',notif:true,section:''},
+  {id:'catalogo',label:'Catálogo',ico:'📦',section:''},
+  {id:'inventario',label:'Inventario',ico:'🗂',section:''},
+  {id:'analitica',label:'Analítica',ico:'📈',section:'Análisis'},
+  {id:'usuarios',label:'Usuarios',ico:'👥',section:''},
+  {id:'preguntas',label:'Preguntas',ico:'💬',notif:true,section:''},
+  {id:'contenido',label:'Contenido',ico:'✏️',section:'Configuración'},
+  {id:'auditoria',label:'Auditoría',ico:'🔍',section:''},
 ];
-const TABS_CLIENTE = [
-  {id:'dashboard',label:'Mi Plan',icon:'🏠'},
-  {id:'mispagos',label:'Mis Pagos',icon:'💳'},
-  {id:'registrar',label:'Registrar Pago',icon:'➕'},
-  {id:'soporte',label:'Soporte',icon:'💬'},
+const NAV_CLIENTE = [
+  {id:'dashboard',label:'Mi Plan',ico:'🏠',section:'Principal'},
+  {id:'mispagos',label:'Mis Pagos',ico:'💳',section:''},
+  {id:'registrar',label:'Registrar Pago',ico:'➕',section:''},
+  {id:'catalogo',label:'Catálogo',ico:'📦',section:'Servicios'},
+  {id:'soporte',label:'Soporte',ico:'💬',section:''},
 ];
 
-function buildTabs(){
-  const tabs=CU.role==='empresa'?TABS_EMPRESA:TABS_CLIENTE;
-  const cont=document.getElementById('appTabs');
-  cont.innerHTML=tabs.map(t=>`<button class="app-tab" id="tab-${t.id}" onclick="loadTab('${t.id}')">${t.icon} ${t.label}${t.notif?`<span class="notif-dot">${t.id==='pagos'?DB.payments.filter(p=>p.status==='pending').length:DB.questions.filter(q=>q.status==='open').length}</span>`:''}</button>`).join('');
-
-  const mob=document.getElementById('mobNav');
-  const mt=tabs.slice(0,5);
-  mob.innerHTML=`<div class="mob-items">${mt.map(t=>`<button class="mob-item" id="mob-${t.id}" onclick="loadTab('${t.id}')">${mobIcon(t.icon)}<span>${t.label}</span></button>`).join('')}</div>`;
+function buildSidebar(){
+  const nav=CU.role==='empresa'?NAV_EMPRESA:NAV_CLIENTE;
+  let html='';let lastSection='';
+  nav.forEach(item=>{
+    if(item.section&&item.section!==lastSection){html+=`<div class="sb-section-label">${item.section}</div>`;lastSection=item.section;}
+    const pendingPay=DB.payments.filter(p=>p.status==='pending').length;
+    const openQ=DB.questions.filter(q=>q.status==='open').length;
+    const count=item.id==='pagos'?pendingPay:item.id==='preguntas'?openQ:0;
+    html+=`<button class="sb-item" id="sb-${item.id}" onclick="loadPage('${item.id}')">`+
+      `<span class="sb-ico">${item.ico}</span>${item.label}`+
+      (count>0?`<span class="sb-badge">${count}</span>`:'')+
+      `</button>`;
+  });
+  document.getElementById('sbNav').innerHTML=html;
 }
-function mobIcon(i){return`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></svg>`;}
 
-function loadTab(id){
-  document.querySelectorAll('.app-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.mob-item').forEach(t=>t.classList.remove('active'));
-  const el=document.getElementById('tab-'+id);if(el)el.classList.add('active');
-  const mel=document.getElementById('mob-'+id);if(mel)mel.classList.add('active');
-  if(chartInst){chartInst.destroy();chartInst=null;}
-  const content=document.getElementById('appContent');
+function loadPage(id){
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('sb-'+id);if(btn)btn.classList.add('active');
+  destroyCharts();
+  const titles={dashboard:'Dashboard',mispagos:'Mis Pagos',registrar:'Registrar Pago',catalogo:'Catálogo de Productos',soporte:'Soporte & Sugerencias',pagos:'Gestión de Pagos',inventario:'Inventario',analitica:'Analítica & Proyecciones',usuarios:'Administración de Usuarios',preguntas:'Preguntas & Sugerencias',contenido:'Gestión de Contenido',auditoria:'Registro de Auditoría'};
+  document.getElementById('pageTitle').textContent=titles[id]||id;
+  const topBtnLabels={pagos:'Exportar',catalogo:'+ Producto',inventario:'+ Ajuste',usuarios:'+ Usuario',preguntas:'Responder',contenido:'Guardar Todo',auditoria:'Exportar'};
+  const topBtn=document.getElementById('topActionBtn');
+  topBtn.textContent=topBtnLabels[id]||'+ Acción';
+  topBtn.onclick=()=>topActionFor(id);
+  const content=document.getElementById('pageContent');
   if(CU.role==='empresa'){
     switch(id){
-      case 'dashboard': content.innerHTML=dashEmpresa();break;
-      case 'pagos': content.innerHTML=pagosEmpresa();break;
-      case 'inventario': content.innerHTML=inventarioPage();break;
-      case 'analitica': content.innerHTML=analiticaPage();setTimeout(drawCharts,100);break;
-      case 'usuarios': content.innerHTML=usuariosPage();break;
-      case 'preguntas': content.innerHTML=preguntasEmpresa();break;
-      case 'contenido': content.innerHTML=contenidoPage();break;
-      case 'auditoria': content.innerHTML=auditoriaPage();break;
+      case 'dashboard':content.innerHTML=pgDashEmpresa();break;
+      case 'pagos':content.innerHTML=pgPagos();break;
+      case 'catalogo':content.innerHTML=pgCatalogo();break;
+      case 'inventario':content.innerHTML=pgInventario();break;
+      case 'analitica':content.innerHTML=pgAnalitica();setTimeout(drawCharts,120);break;
+      case 'usuarios':content.innerHTML=pgUsuarios();break;
+      case 'preguntas':content.innerHTML=pgPreguntas();break;
+      case 'contenido':content.innerHTML=pgContenido();break;
+      case 'auditoria':content.innerHTML=pgAuditoria();break;
     }
   } else {
     switch(id){
-      case 'dashboard': content.innerHTML=dashCliente();break;
-      case 'mispagos': content.innerHTML=misPagosCliente();break;
-      case 'registrar': content.innerHTML=registrarPago();break;
-      case 'soporte': content.innerHTML=soporteCliente();break;
+      case 'dashboard':content.innerHTML=pgDashCliente();break;
+      case 'mispagos':content.innerHTML=pgMisPagos();break;
+      case 'registrar':content.innerHTML=pgRegistrarPago();break;
+      case 'catalogo':content.innerHTML=pgCatalogo();break;
+      case 'soporte':content.innerHTML=pgSoporte();break;
     }
   }
+}
+
+function topActionFor(id){
+  if(id==='catalogo')openProdModal(null);
+  else if(id==='pagos')toast('Exportando registros...','ok');
+  else if(id==='auditoria')toast('Exportando auditoría...','ok');
+  else toast('Acción ejecutada','ok');
 }
 
 // ============================================================
 // EMPRESA PAGES
 // ============================================================
-function dashEmpresa(){
+function pgDashEmpresa(){
   const pending=DB.payments.filter(p=>p.status==='pending').length;
-  const totalMonth=DB.payments.filter(p=>p.status==='confirmed'&&p.month.includes('Abril')).reduce((a,b)=>a+b.amount,0);
+  const totalApr=DB.payments.filter(p=>p.status==='confirmed'&&p.month.includes('Abril')).reduce((a,b)=>a+b.amount,0);
   const clientes=DB.users.filter(u=>u.role==='cliente').length;
   const openQ=DB.questions.filter(q=>q.status==='open').length;
   return`
-<h1 class="page-title">Dashboard <span class="hi">Empresa</span></h1>
-<div class="kpi-grid">
-  <div class="kpi"><div class="kpi-label">Ingresos Abril</div><div class="kpi-value gold">$${totalMonth}</div><div class="kpi-badge up">↑ 12% vs marzo</div></div>
-  <div class="kpi"><div class="kpi-label">Pagos Pendientes</div><div class="kpi-value rose">${pending}</div><div class="kpi-sub">Por confirmar</div></div>
-  <div class="kpi"><div class="kpi-label">Clientes Activos</div><div class="kpi-value aqua">${clientes}</div><div class="kpi-badge up">↑ 2 nuevos</div></div>
-  <div class="kpi"><div class="kpi-label">Preguntas Abiertas</div><div class="kpi-value">${openQ}</div><div class="kpi-badge warn">Sin responder</div></div>
+<div class="kpi-row">
+  <div class="kpi-card"><div class="kpi-lbl">Ingresos Abril</div><div class="kpi-val gr">$${totalApr}</div><div class="kpi-pill up">↑ 12% vs marzo</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Pagos pendientes</div><div class="kpi-val am">${pending}</div><div class="kpi-sub">Por confirmar</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Clientes activos</div><div class="kpi-val">${clientes}</div><div class="kpi-pill up">↑ 2 nuevos</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Preguntas abiertas</div><div class="kpi-val">${openQ}</div><div class="kpi-pill warn">Sin responder</div></div>
 </div>
-<div class="alert-list">
-  ${pending>0?`<div class="alert-item"><div class="alert-icon">⚠️</div><div class="alert-body"><strong>${pending} pago(s) pendiente(s) de confirmación</strong><small>Revisa la sección de Pagos para confirmar o rechazar</small></div><button class="btn-sm ghost" onclick="loadTab('pagos')">Ver Pagos →</button></div>`:''}
-  <div class="alert-item danger"><div class="alert-icon">🔴</div><div class="alert-body"><strong>Plan de María González vence en 5 días</strong><small>Plan Plus · $85/mes · Vence: 30 Abr 2025</small></div></div>
-  <div class="alert-item info"><div class="alert-icon">📦</div><div class="alert-body"><strong>Stock bajo: Starlinks (${DB.inventory[0].count} unidades)</strong><small>Mínimo recomendado: ${DB.inventory[0].min} unidades</small></div></div>
-  ${openQ>0?`<div class="alert-item"><div class="alert-icon">💬</div><div class="alert-body"><strong>${openQ} pregunta(s) de clientes sin respuesta</strong><small>Accede a Preguntas para responder</small></div><button class="btn-sm ghost" onclick="loadTab('preguntas')">Responder →</button></div>`:''}
+<div class="alert-stack">
+  ${pending>0?`<div class="alert-row"><div class="alert-ico">💳</div><div class="alert-body"><strong>${pending} pago(s) pendientes de confirmación</strong><small>Revisa la sección Pagos para aprobar o rechazar</small></div><button class="btn-sm btn-sm-ghost" style="background:transparent;color:var(--amber);border:1px solid currentColor" onclick="loadPage('pagos')">Ver →</button></div>`:''}
+  <div class="alert-row a-err"><div class="alert-ico">⚠️</div><div class="alert-body"><strong>Plan de María González vence en 5 días</strong><small>Plan Plus · $85/mes · Vence: 30 Abr 2025</small></div></div>
+  <div class="alert-row a-info"><div class="alert-ico">📦</div><div class="alert-body"><strong>Stock bajo: Starlinks (${DB.inventory[0].count} unidades)</strong><small>Mínimo recomendado: ${DB.inventory[0].min} unidades</small></div></div>
 </div>
-<div class="card-box"><h3>Pagos recientes</h3>
-<div class="table-wrap"><table>
+<div class="box"><div class="box-hd"><h3>Últimos pagos</h3><span>${DB.payments.length} registros</span></div>
+<div class="tw"><table>
 <thead><tr><th>Cliente</th><th>Mes</th><th>Monto</th><th>Método</th><th>Estado</th></tr></thead>
-<tbody>${DB.payments.slice(0,4).map(p=>`<tr><td>${p.user}</td><td>${p.month}</td><td><strong>$${p.amount}</strong></td><td>${p.method}</td><td><span class="pill ${p.status==='confirmed'?'ok':p.status==='pending'?'pend':'rej'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'Pendiente':'Rechazado'}</span></td></tr>`).join('')}</tbody>
-</table></div></div>`;
+<tbody>${DB.payments.slice(0,5).map(p=>`<tr><td>${p.user}</td><td>${p.month}</td><td><strong>$${p.amount}</strong></td><td>${p.method}</td><td><span class="pill ${p.status==='confirmed'?'pill-ok':p.status==='pending'?'pill-warn':'pill-err'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'Pendiente':'Rechazado'}</span></td></tr>`).join('')}
+</tbody></table></div></div>`;
 }
 
-function pagosEmpresa(){
-  const pending=DB.payments.filter(p=>p.status==='pending');
+function pgPagos(){
+  const pend=DB.payments.filter(p=>p.status==='pending');
   return`
-<h1 class="page-title">Gestión de <span class="hi">Pagos</span></h1>
-${pending.length>0?`<div class="alert-list">${pending.map(p=>`<div class="alert-item"><div class="alert-icon">🔔</div><div class="alert-body"><strong>Pago pendiente – ${p.user}</strong><small>${p.month} · $${p.amount} · ${p.method} · Ref: ${p.ref}</small></div><div style="display:flex;gap:8px"><button class="act-btn ok" onclick="confirmPago(${p.id})">✓ Confirmar</button><button class="act-btn rej" onclick="rejectPago(${p.id})">✕ Rechazar</button></div></div>`).join('')}</div>`:''}
-<div class="card-box"><h3>Todos los Pagos <span style="font-size:12px;font-weight:400;color:var(--text2)">${DB.payments.length} registros</span></h3>
-<div class="table-wrap"><table>
+${pend.length?`<div class="alert-stack">${pend.map(p=>`<div class="alert-row"><div class="alert-ico">🔔</div><div class="alert-body"><strong>${p.user} – ${p.month}</strong><small>$${p.amount} · ${p.method} · Ref: ${p.ref}</small></div><div style="display:flex;gap:6px"><button class="ab ab-ok" onclick="confirmPago(${p.id})">✓ Confirmar</button><button class="ab ab-err" onclick="rejectPago(${p.id})">✕ Rechazar</button></div></div>`).join('')}</div>`:''}
+<div class="box"><div class="box-hd"><h3>Todos los pagos</h3><span>${DB.payments.length} registros</span></div>
+<div class="tw"><table>
 <thead><tr><th>#</th><th>Cliente</th><th>Plan</th><th>Mes</th><th>Monto</th><th>Método</th><th>Referencia</th><th>Estado</th><th>Acción</th></tr></thead>
 <tbody>${DB.payments.map(p=>`<tr>
-<td style="color:var(--text2)">#${p.id}</td>
-<td>${p.user}</td><td>${p.plan}</td><td>${p.month}</td>
-<td><strong>$${p.amount}</strong></td><td>${p.method}</td><td style="font-family:monospace;font-size:12px">${p.ref}</td>
-<td><span class="pill ${p.status==='confirmed'?'ok':p.status==='pending'?'pend':'rej'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'Pendiente':'Rechazado'}</span></td>
-<td style="display:flex;gap:6px;flex-wrap:wrap">
-${p.status==='pending'?`<button class="act-btn ok" onclick="confirmPago(${p.id})">✓</button><button class="act-btn rej" onclick="rejectPago(${p.id})">✕</button>`:''}
-<button class="act-btn dl" onclick="downloadRecibo(${p.id})">⬇ Recibo</button>
+<td style="color:var(--ink4)">#${p.id}</td><td>${p.user}</td><td>${p.plan}</td><td>${p.month}</td>
+<td><strong>$${p.amount}</strong></td><td>${p.method}</td>
+<td style="font-family:monospace;font-size:12px;color:var(--ink3)">${p.ref}</td>
+<td><span class="pill ${p.status==='confirmed'?'pill-ok':p.status==='pending'?'pill-warn':'pill-err'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'Pendiente':'Rechazado'}</span></td>
+<td style="display:flex;gap:5px;flex-wrap:wrap">
+${p.status==='pending'?`<button class="ab ab-ok" onclick="confirmPago(${p.id})">✓</button><button class="ab ab-err" onclick="rejectPago(${p.id})">✕</button>`:''}
+<button class="ab ab-gray" onclick="downloadRecibo(${p.id})">⬇</button>
 </td></tr>`).join('')}
 </tbody></table></div></div>`;
 }
 
 function confirmPago(id){
   const p=DB.payments.find(x=>x.id===id);if(!p)return;
-  p.status='confirmed';
-  DB.audit.unshift({action:`Pago confirmado #${id} – ${p.user}`,user:CU.email,ip:'10.0.0.2',device:'Web',time:'Ahora'});
-  showToast('Pago confirmado exitosamente','success');
-  loadTab('pagos');buildTabs();
+  p.status='confirmed';addAudit(`Pago confirmado #${id}`,CU.email);
+  toast('Pago confirmado','ok');loadPage('pagos');buildSidebar();
 }
 function rejectPago(id){
   const p=DB.payments.find(x=>x.id===id);if(!p)return;
-  p.status='rejected';
-  DB.audit.unshift({action:`Pago rechazado #${id} – ${p.user}`,user:CU.email,ip:'10.0.0.2',device:'Web',time:'Ahora'});
-  showToast('Pago rechazado','error');
-  loadTab('pagos');buildTabs();
+  p.status='rejected';addAudit(`Pago rechazado #${id}`,CU.email);
+  toast('Pago rechazado','err');loadPage('pagos');buildSidebar();
 }
 
-function inventarioPage(){
+// ── CATALOGUE ──
+function pgCatalogo(){
+  const cats=['Todos',...new Set(DB.products.map(p=>p.category))];
   return`
-<h1 class="page-title">Inventario de <span class="hi">Productos</span></h1>
+<div class="prod-toolbar">
+  <input type="text" class="prod-search" placeholder="Buscar producto..." oninput="filterProds(this.value)" id="prodSearch">
+  <div style="display:flex;gap:6px;flex-wrap:wrap" id="catFilters">
+  ${cats.map(c=>`<button class="btn ${c===prodFilter?'btn-solid':'btn-line'}" style="padding:6px 14px;font-size:12px;border-radius:50px" onclick="setCatFilter('${c}')">${c}</button>`).join('')}
+  </div>
+</div>
+<div class="prod-grid" id="prodGrid">${renderProdCards()}</div>`;
+}
+
+function renderProdCards(){
+  const search=(document.getElementById('prodSearch')?.value||'').toLowerCase();
+  return DB.products.filter(p=>{
+    const matchCat=prodFilter==='Todos'||p.category===prodFilter;
+    const matchSearch=!search||p.name.toLowerCase().includes(search)||p.category.toLowerCase().includes(search)||p.desc.toLowerCase().includes(search);
+    return matchCat&&matchSearch;
+  }).map(p=>`
+<div class="prod-card">
+  <div class="prod-img">${p.icon}</div>
+  <div class="prod-body">
+    <div class="prod-cat">${p.category}</div>
+    <div class="prod-name">${p.name}</div>
+    <div class="prod-desc">${p.desc}</div>
+    <div class="prod-footer">
+      <div class="prod-price">$${p.price}</div>
+      <span class="prod-stock pill ${p.stock<=p.minStock?'pill-err':'pill-ok'}">${p.stock<=p.minStock?'⚠ '+p.stock+' uds':p.stock+' uds'}</span>
+    </div>
+    ${CU.role==='empresa'?`<div class="prod-acts">
+      <button class="prod-edit" onclick="openProdModal(${p.id})">✏ Editar</button>
+      <button class="prod-del" onclick="deleteProd(${p.id})">🗑</button>
+    </div>`:''}
+  </div>
+</div>`).join('')||'<p style="color:var(--ink4);padding:20px 0">No se encontraron productos.</p>';
+}
+
+function setCatFilter(c){
+  prodFilter=c;
+  const content=document.getElementById('pageContent');
+  if(content)content.innerHTML=pgCatalogo();
+}
+
+function filterProds(v){
+  const grid=document.getElementById('prodGrid');
+  if(grid)grid.innerHTML=renderProdCards();
+}
+
+function openProdModal(id){
+  editingProdId=id;
+  document.getElementById('prodOverlay').classList.add('open');
+  const prod=id?DB.products.find(p=>p.id===id):null;
+  document.getElementById('prodModalTitle').textContent=prod?'Editar Producto':'Nuevo Producto';
+  const cats=['Antenas','Accesorios','Conectores','Energía','Cables','Redes','Otros'];
+  document.getElementById('prodModalBody').innerHTML=`
+<div class="prod-form-grid">
+  <div class="fg span2"><label class="fl">Nombre del Producto</label><input type="text" class="fi" id="pN" value="${prod?.name||''}" placeholder="Ej: Starlink Gen 3"></div>
+  <div class="fg"><label class="fl">Categoría</label>
+  <select class="fi" id="pCat">${cats.map(c=>`<option ${prod?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+  <div class="fg"><label class="fl">SKU / Código</label><input type="text" class="fi" id="pSku" value="${prod?.sku||''}" placeholder="Ej: SLK-001"></div>
+  <div class="fg"><label class="fl">Precio (USD)</label><input type="number" class="fi" id="pPrice" value="${prod?.price||''}" placeholder="0.00" min="0" step="0.01"></div>
+  <div class="fg"><label class="fl">Stock actual</label><input type="number" class="fi" id="pStock" value="${prod?.stock||''}" placeholder="0" min="0"></div>
+  <div class="fg"><label class="fl">Stock mínimo</label><input type="number" class="fi" id="pMinStock" value="${prod?.minStock||''}" placeholder="0" min="0"></div>
+  <div class="fg"><label class="fl">Ícono (emoji)</label><input type="text" class="fi" id="pIco" value="${prod?.icon||'📦'}" placeholder="📦" style="font-size:20px"></div>
+  <div class="fg span2"><label class="fl">Descripción</label><textarea class="fi" id="pDesc" placeholder="Describe el producto...">${prod?.desc||''}</textarea></div>
+</div>
+<div style="display:flex;gap:10px;margin-top:16px">
+  <button class="btn-block" onclick="saveProd()">Guardar Producto</button>
+  <button onclick="closeProdModal()" style="padding:12px 20px;border-radius:50px;border:1px solid var(--line);background:var(--off);color:var(--ink2);cursor:pointer;font-size:13px">Cancelar</button>
+</div>`;
+}
+
+function closeProdModal(){document.getElementById('prodOverlay').classList.remove('open');editingProdId=null;}
+
+function saveProd(){
+  const n=document.getElementById('pN').value.trim();
+  const cat=document.getElementById('pCat').value;
+  const sku=document.getElementById('pSku').value.trim();
+  const price=+document.getElementById('pPrice').value;
+  const stock=+document.getElementById('pStock').value;
+  const minStock=+document.getElementById('pMinStock').value;
+  const ico=document.getElementById('pIco').value.trim()||'📦';
+  const desc=document.getElementById('pDesc').value.trim();
+  if(!n||!price){toast('Nombre y precio son obligatorios','err');return;}
+  if(editingProdId){
+    const p=DB.products.find(x=>x.id===editingProdId);
+    Object.assign(p,{name:n,category:cat,sku,price,stock,minStock,icon:ico,desc});
+    addAudit(`Producto editado: ${n}`,CU.email);
+    toast('Producto actualizado','ok');
+  } else {
+    DB.products.push({id:Date.now(),name:n,category:cat,sku,price,stock,minStock,icon:ico,desc});
+    addAudit(`Producto creado: ${n}`,CU.email);
+    toast('Producto creado','ok');
+  }
+  closeProdModal();
+  loadPage('catalogo');
+}
+
+function deleteProd(id){
+  if(!confirm('¿Eliminar este producto?'))return;
+  const i=DB.products.findIndex(p=>p.id===id);
+  if(i>-1){addAudit(`Producto eliminado #${id}`,CU.email);DB.products.splice(i,1);}
+  toast('Producto eliminado','err');
+  loadPage('catalogo');
+}
+
+// ── INVENTORY ──
+function pgInventario(){
+  return`
 <div class="inv-grid">${DB.inventory.map((item,i)=>`
 <div class="inv-card">
-  <div class="inv-icon">${item.icon}</div>
+  <div class="inv-ico">${item.icon}</div>
   <div class="inv-name">${item.name}</div>
-  <div class="inv-count" id="ic-${i}">${item.count}</div>
-  <div class="inv-sub">Mínimo recomendado: ${item.min}</div>
-  ${item.count<=item.min?`<div class="inv-low">⚠ Stock bajo</div>`:'<div style="font-size:11px;color:var(--aqua)">✓ Stock OK</div>'}
+  <div class="inv-count ${item.count<=item.min?'low':'ok'}" id="ic-${i}">${item.count}</div>
+  <div class="inv-sub">Mínimo: ${item.min} uds</div>
+  ${item.count<=item.min?'<div style="font-size:11px;color:var(--red);font-weight:600;margin-top:4px">⚠ Stock bajo</div>':'<div style="font-size:11px;color:var(--accent);margin-top:4px">✓ OK</div>'}
   <div class="inv-ctrls">
     <button class="inv-btn" onclick="adjInv(${i},-1)">−</button>
+    <button class="inv-btn" onclick="adjInv(${i},5)">+5</button>
     <button class="inv-btn" onclick="adjInv(${i},1)">+</button>
   </div>
 </div>`).join('')}</div>
-<div class="card-box"><h3>Resumen de Inventario</h3>
-<div class="table-wrap"><table>
-<thead><tr><th>Producto</th><th>Stock Actual</th><th>Mínimo</th><th>Estado</th></tr></thead>
+<div class="box"><div class="box-hd"><h3>Detalle de Inventario</h3></div>
+<div class="tw"><table>
+<thead><tr><th>Producto</th><th>Stock</th><th>Mínimo</th><th>Estado</th></tr></thead>
 <tbody>${DB.inventory.map(item=>`<tr>
-<td>${item.icon} ${item.name}</td>
-<td><strong>${item.count}</strong></td><td>${item.min}</td>
-<td><span class="pill ${item.count<=item.min?'rej':'ok'}">${item.count<=item.min?'Stock Bajo':'OK'}</span></td>
+<td>${item.icon} ${item.name}</td><td><strong>${item.count}</strong></td><td>${item.min}</td>
+<td><span class="pill ${item.count<=item.min?'pill-err':'pill-ok'}">${item.count<=item.min?'Stock Bajo':'Disponible'}</span></td>
 </tr>`).join('')}</tbody></table></div></div>`;
 }
 
-function adjInv(i,delta){
-  DB.inventory[i].count=Math.max(0,DB.inventory[i].count+delta);
-  document.getElementById('ic-'+i).textContent=DB.inventory[i].count;
-  showToast(`${DB.inventory[i].name}: ${DB.inventory[i].count} unidades`,'success');
+function adjInv(i,d){
+  DB.inventory[i].count=Math.max(0,DB.inventory[i].count+d);
+  const el=document.getElementById('ic-'+i);
+  if(el){el.textContent=DB.inventory[i].count;el.className='inv-count '+(DB.inventory[i].count<=DB.inventory[i].min?'low':'ok');}
+  toast(`${DB.inventory[i].name}: ${DB.inventory[i].count} uds`,'ok');
 }
 
-function analiticaPage(){
+// ── ANALYTICS ──
+function pgAnalitica(){
+  const confirmed=DB.payments.filter(p=>p.status==='confirmed');
+  const total=confirmed.reduce((a,b)=>a+b.amount,0);
+  const cB=DB.users.filter(u=>u.plan==='Básico').length;
+  const cM=DB.users.filter(u=>u.plan==='Medio').length;
+  const cP=DB.users.filter(u=>u.plan==='Plus').length;
+  const proj=Math.round((cB*25+cM*45+cP*85)*1.12);
   return`
-<h1 class="page-title">Analítica y <span class="hi">Proyecciones</span></h1>
-<div class="charts-grid">
-  <div class="chart-card">
-    <h3>Ingresos Mensuales 2025</h3>
-    <div class="chart-sub">Histórico de cobros confirmados + proyección</div>
-    <canvas id="chartVentas" height="120"></canvas>
-  </div>
-  <div class="chart-card">
-    <h3>Proyección</h3>
-    <div class="chart-sub">Próximo mes estimado</div>
-    <div class="proj-num" id="projVal">$--</div>
-    <div class="proj-lbl">Ingreso proyectado</div>
-    <div class="proj-trend" id="projTrend">↑ calculando...</div>
-    <hr style="margin:16px 0;border:none;border-top:1px solid var(--border)">
-    <h3>Distribución de Planes</h3>
-    <canvas id="chartPlanes" height="130"></canvas>
-  </div>
+<div class="kpi-row">
+  <div class="kpi-card"><div class="kpi-lbl">Total 2025</div><div class="kpi-val gr">$${total}</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Clientes Básico</div><div class="kpi-val">${cB}</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Clientes Medio</div><div class="kpi-val">${cM}</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Clientes Plus</div><div class="kpi-val gr">${cP}</div></div>
 </div>
-<div class="kpi-grid">
-  <div class="kpi"><div class="kpi-label">Ingreso Total 2025</div><div class="kpi-value gold">$${DB.payments.filter(p=>p.status==='confirmed').reduce((a,b)=>a+b.amount,0)}</div></div>
-  <div class="kpi"><div class="kpi-label">Clientes Básico</div><div class="kpi-value">${DB.users.filter(u=>u.plan==='Básico').length}</div></div>
-  <div class="kpi"><div class="kpi-label">Clientes Medio</div><div class="kpi-value gold">${DB.users.filter(u=>u.plan==='Medio').length}</div></div>
-  <div class="kpi"><div class="kpi-label">Clientes Plus</div><div class="kpi-value aqua">${DB.users.filter(u=>u.plan==='Plus').length}</div></div>
+<div class="charts-grid">
+  <div class="chart-box">
+    <h3>Ingresos Mensuales 2025</h3>
+    <p>Histórico confirmado + proyección estimada</p>
+    <canvas id="chartMain" height="130"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Proyección próximo mes</h3>
+    <p>Basada en planes activos +12%</p>
+    <div class="proj-big">$${proj}</div>
+    <div class="proj-lbl">Ingreso proyectado</div>
+    <div class="proj-up">↑ +12% estimado</div>
+    <hr style="margin:18px 0;border:none;border-top:1px solid var(--line)">
+    <h3 style="font-size:14px;margin-bottom:12px">Distribución de planes</h3>
+    <canvas id="chartDona" height="120"></canvas>
+  </div>
 </div>`;
 }
 
 function drawCharts(){
-  const ctx1=document.getElementById('chartVentas');
-  const ctx2=document.getElementById('chartPlanes');
-  if(!ctx1||!ctx2)return;
-  const months=['Ene','Feb','Mar','Abr','May*','Jun*','Jul*'];
-  const actuals=[220,285,305,340,null,null,null];
-  const proj=[null,null,null,340,390,430,480];
-  chartInst=new Chart(ctx1,{type:'line',data:{labels:months,datasets:[
-    {label:'Real',data:actuals,borderColor:'#b8883c',backgroundColor:'rgba(184,136,60,.08)',borderWidth:2.5,tension:.4,pointBackgroundColor:'#b8883c',pointRadius:4,spanGaps:false},
-    {label:'Proyección',data:proj,borderColor:'#1a8f7a',backgroundColor:'rgba(26,143,122,.06)',borderWidth:2,borderDash:[5,4],tension:.4,pointBackgroundColor:'#1a8f7a',pointRadius:3,spanGaps:false}
-  ]},options:{responsive:true,plugins:{legend:{labels:{font:{family:'DM Sans',size:12},color:'#5c5c72'}}},scales:{y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#9494a8',font:{size:11},callback:v=>'$'+v}},x:{grid:{display:false},ticks:{color:'#9494a8',font:{size:11}}}}}});
-  const cBasico=DB.users.filter(u=>u.plan==='Básico').length;
-  const cMedio=DB.users.filter(u=>u.plan==='Medio').length;
-  const cPlus=DB.users.filter(u=>u.plan==='Plus').length;
-  new Chart(ctx2,{type:'doughnut',data:{labels:['Básico','Medio','Plus'],datasets:[{data:[cBasico,cMedio,cPlus],backgroundColor:['#f0d9a8','#b8883c','#1a8f7a'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{labels:{font:{family:'DM Sans',size:12},color:'#5c5c72'}}}}});
-  const totalNext=(cBasico*25+cMedio*45+cPlus*85)*1.12;
-  document.getElementById('projVal').textContent='$'+Math.round(totalNext);
-  document.getElementById('projTrend').textContent='↑ +12% estimado';
+  const c1=document.getElementById('chartMain'),c2=document.getElementById('chartDona');if(!c1||!c2)return;
+  Chart.defaults.font.family='Inter';Chart.defaults.color='#a8a7a3';
+  chartInst1=new Chart(c1,{type:'line',data:{labels:['Ene','Feb','Mar','Abr','May*','Jun*','Jul*'],datasets:[
+    {label:'Real',data:[220,285,305,340,null,null,null],borderColor:'#2d6a4f',backgroundColor:'rgba(45,106,79,.06)',borderWidth:2,tension:.4,pointBackgroundColor:'#2d6a4f',pointRadius:4,spanGaps:false},
+    {label:'Proyección',data:[null,null,null,340,380,420,470],borderColor:'#a8a7a3',backgroundColor:'rgba(0,0,0,.02)',borderWidth:1.5,borderDash:[4,4],tension:.4,pointBackgroundColor:'#a8a7a3',pointRadius:3,spanGaps:false}
+  ]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,font:{size:12}}}},scales:{y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:v=>'$'+v,font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}});
+  const cB=DB.users.filter(u=>u.plan==='Básico').length,cM=DB.users.filter(u=>u.plan==='Medio').length,cP=DB.users.filter(u=>u.plan==='Plus').length;
+  chartInst2=new Chart(c2,{type:'doughnut',data:{labels:['Básico','Medio','Plus'],datasets:[{data:[cB,cM,cP],backgroundColor:['#e5e3de','#40916c','#111110'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,cutout:'68%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12},padding:12}}}}});
 }
 
-function usuariosPage(){
-  return`
-<h1 class="page-title">Administración de <span class="hi">Usuarios</span></h1>
-<div class="card-box">
-  <h3>Usuarios del Sistema <button class="btn-sm ghost" onclick="newUserModal()">+ Nuevo Usuario</button></h3>
-  <div class="table-wrap"><table>
-  <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Plan</th><th>Registro</th><th>Estado</th><th>Acción</th></tr></thead>
-  <tbody>${DB.users.map(u=>`<tr>
-  <td style="color:var(--text2)">#${u.id}</td>
-  <td><div style="display:flex;align-items:center;gap:8px"><div class="uav" style="width:28px;height:28px;font-size:10px;flex-shrink:0">${u.av}</div>${u.name}</div></td>
-  <td style="font-size:12px">${u.email}</td>
-  <td><span class="role-badge ${u.role}">${u.role}</span></td>
-  <td>${u.plan}</td><td style="font-size:12px">${u.joined}</td>
-  <td><span class="pill ${u.active?'ok':'rej'}">${u.active?'Activo':'Inactivo'}</span></td>
-  <td><button class="act-btn dl" onclick="toggleUser(${u.id})">${u.active?'Suspender':'Activar'}</button></td>
-  </tr>`).join('')}</tbody></table></div></div>`;
+// ── USUARIOS ──
+function pgUsuarios(){
+  return`<div class="box"><div class="box-hd"><h3>Usuarios del sistema</h3><button class="ab ab-gray" onclick="toast('Función disponible pronto','ok')">+ Nuevo usuario</button></div>
+<div class="tw"><table>
+<thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Plan</th><th>Registro</th><th>Estado</th><th>Acción</th></tr></thead>
+<tbody>${DB.users.map(u=>`<tr>
+<td style="color:var(--ink4)">#${u.id}</td>
+<td><div style="display:flex;align-items:center;gap:8px"><div class="sb-av" style="width:26px;height:26px;font-size:10px">${u.av}</div>${u.name}</div></td>
+<td style="font-size:12px;color:var(--ink3)">${u.email}</td>
+<td><span class="role-badge ${u.role}">${u.role}</span></td>
+<td style="font-size:12px">${u.plan}</td>
+<td style="font-size:12px;color:var(--ink4)">${u.joined}</td>
+<td><span class="pill ${u.active?'pill-ok':'pill-err'}">${u.active?'Activo':'Inactivo'}</span></td>
+<td><button class="ab ab-gray" onclick="toggleUser(${u.id})">${u.active?'Suspender':'Activar'}</button></td>
+</tr>`).join('')}</tbody></table></div></div>`;
 }
 
 function toggleUser(id){
-  const u=DB.users.find(x=>x.id===id);if(!u||u.id===CU.id)return;
-  u.active=!u.active;
-  DB.audit.unshift({action:`Usuario ${u.active?'activado':'suspendido'}: ${u.email}`,user:CU.email,ip:'10.0.0.2',device:'Web',time:'Ahora'});
-  showToast(`${u.name} ${u.active?'activado':'suspendido'}`,'success');
-  loadTab('usuarios');
+  const u=DB.users.find(x=>x.id===id);if(!u||u.id===CU.id){toast('No puedes suspenderte a ti mismo','err');return;}
+  u.active=!u.active;addAudit(`Usuario ${u.active?'activado':'suspendido'}: ${u.email}`,CU.email);
+  toast(`${u.name} ${u.active?'activado':'suspendido'}`,'ok');loadPage('usuarios');
 }
 
-function preguntasEmpresa(){
+// ── PREGUNTAS ──
+function pgPreguntas(){
   return`
-<h1 class="page-title">Preguntas y <span class="hi">Sugerencias</span></h1>
 ${DB.questions.map(q=>`
-<div class="qa-item">
-  <div class="qa-head">
+<div class="qa-card">
+  <div class="qa-hd">
     <div class="qa-av">${q.av}</div>
-    <div class="qa-user-info"><div class="qa-uname">${q.user}</div><div class="qa-date">${q.date}</div></div>
-    <span class="qa-status ${q.status}">${q.status==='answered'?'Respondido':'Abierto'}</span>
+    <div class="qa-info"><div class="uname">${q.user}</div><div class="udate">${q.date}</div></div>
+    <span class="pill ${q.status==='answered'?'pill-ok':'pill-warn'}">${q.status==='answered'?'Respondido':'Abierto'}</span>
   </div>
   <div class="qa-q">${q.q}</div>
-  ${q.a?`<div class="qa-ans"><strong>Respuesta:</strong> ${q.a}</div>`:
-  `<div style="margin-top:10px;display:flex;gap:8px">
+  ${q.a?`<div class="qa-ans">${q.a}</div>`:
+  `<div style="display:flex;gap:8px;margin-top:10px">
     <input type="text" class="fi" id="ans-${q.id}" placeholder="Escribe tu respuesta..." style="flex:1;font-size:13px">
-    <button class="btn-sm primary" onclick="responderQ(${q.id})">Responder</button>
+    <button class="btn btn-solid" style="padding:8px 16px;font-size:12px;border-radius:50px" onclick="responderQ(${q.id})">Responder</button>
   </div>`}
 </div>`).join('')}`;
 }
@@ -998,244 +1230,227 @@ ${DB.questions.map(q=>`
 function responderQ(id){
   const q=DB.questions.find(x=>x.id===id);if(!q)return;
   const v=document.getElementById('ans-'+id)?.value.trim();
-  if(!v){showToast('Escribe una respuesta','error');return;}
-  q.a=v;q.status='answered';
-  DB.audit.unshift({action:`Pregunta respondida #${id}`,user:CU.email,ip:'10.0.0.2',device:'Web',time:'Ahora'});
-  showToast('Respuesta enviada','success');
-  loadTab('preguntas');buildTabs();
+  if(!v){toast('Escribe una respuesta','err');return;}
+  q.a=v;q.status='answered';addAudit(`Pregunta respondida #${id}`,CU.email);
+  toast('Respuesta enviada','ok');loadPage('preguntas');buildSidebar();
 }
 
-function contenidoPage(){
+// ── CONTENIDO ──
+function pgContenido(){
   const c=DB.contentHome;
-  return`
-<h1 class="page-title">Gestión de <span class="hi">Contenido</span></h1>
-<div class="editor-grid">
-  <div class="card-box"><h3>Página Principal</h3>
-    <div class="fg"><label class="fl">Título Hero</label><input type="text" class="fi" id="ce-hero" value="${c.hero}"></div>
-    <div class="fg"><label class="fl">Subtítulo Hero</label><textarea class="fi" id="ce-sub">${c.heroSub}</textarea></div>
-    <button class="btn-sm primary" onclick="saveContent()">Guardar Cambios</button>
-  </div>
-  <div class="card-box"><h3>Precios de Planes</h3>
-    <div class="fg"><label class="fl">Precio Plan Básico ($)</label><input type="number" class="fi" id="ce-bp" value="${c.basicPrice}"></div>
-    <div class="fg"><label class="fl">Velocidad Básico</label><input type="text" class="fi" id="ce-bs" value="${c.basicSpeed}"></div>
-    <div class="fg"><label class="fl">Precio Plan Medio ($)</label><input type="number" class="fi" id="ce-mp" value="${c.medioPrice}"></div>
-    <div class="fg"><label class="fl">Velocidad Medio</label><input type="text" class="fi" id="ce-ms" value="${c.medioSpeed}"></div>
-    <div class="fg"><label class="fl">Precio Plan Plus ($)</label><input type="number" class="fi" id="ce-pp" value="${c.plusPrice}"></div>
-    <div class="fg"><label class="fl">Velocidad Plus</label><input type="text" class="fi" id="ce-ps" value="${c.plusSpeed}"></div>
-    <button class="btn-sm primary" onclick="savePlanes()">Actualizar Planes</button>
-  </div>
-</div>`;
+  return`<div class="editor-grid">
+<div class="box"><div class="box-hd"><h3>Página Principal</h3></div>
+  <div class="fg"><label class="fl">Título Hero</label><input type="text" class="fi" id="ceH" value="${c.hero}"></div>
+  <div class="fg"><label class="fl">Subtítulo</label><textarea class="fi" id="ceS">${c.heroSub}</textarea></div>
+  <button class="btn btn-solid" style="border-radius:50px;padding:10px 22px;font-size:13px" onclick="saveContent()">Guardar</button>
+</div>
+<div class="box"><div class="box-hd"><h3>Precios de Planes</h3></div>
+  <div class="fg"><label class="fl">Precio Básico ($)</label><input type="number" class="fi" id="ceBP" value="${c.basicPrice}"></div>
+  <div class="fg"><label class="fl">Velocidad Básico</label><input type="text" class="fi" id="ceBS" value="${c.basicSpeed}"></div>
+  <div class="fg"><label class="fl">Precio Medio ($)</label><input type="number" class="fi" id="ceMP" value="${c.medioPrice}"></div>
+  <div class="fg"><label class="fl">Velocidad Medio</label><input type="text" class="fi" id="ceMS" value="${c.medioSpeed}"></div>
+  <div class="fg"><label class="fl">Precio Plus ($)</label><input type="number" class="fi" id="cePP" value="${c.plusPrice}"></div>
+  <div class="fg"><label class="fl">Velocidad Plus</label><input type="text" class="fi" id="cePS" value="${c.plusSpeed}"></div>
+  <button class="btn btn-solid" style="border-radius:50px;padding:10px 22px;font-size:13px" onclick="savePlanes()">Actualizar</button>
+</div></div>`;
 }
 
 function saveContent(){
-  DB.contentHome.hero=document.getElementById('ce-hero').value;
-  DB.contentHome.heroSub=document.getElementById('ce-sub').value;
-  DB.audit.unshift({action:'Contenido de página actualizado',user:CU.email,ip:'10.0.0.2',device:'Web',time:'Ahora'});
-  showToast('Contenido actualizado','success');
+  DB.contentHome.hero=document.getElementById('ceH').value;
+  DB.contentHome.heroSub=document.getElementById('ceS').value;
+  addAudit('Contenido actualizado',CU.email);toast('Contenido guardado','ok');
 }
 function savePlanes(){
-  DB.contentHome.basicPrice=document.getElementById('ce-bp').value;
-  DB.contentHome.basicSpeed=document.getElementById('ce-bs').value;
-  DB.contentHome.medioPrice=document.getElementById('ce-mp').value;
-  DB.contentHome.medioSpeed=document.getElementById('ce-ms').value;
-  DB.contentHome.plusPrice=document.getElementById('ce-pp').value;
-  DB.contentHome.plusSpeed=document.getElementById('ce-ps').value;
-  DB.plans['Básico'].price=+DB.contentHome.basicPrice;
-  DB.plans['Medio'].price=+DB.contentHome.medioPrice;
-  DB.plans['Plus'].price=+DB.contentHome.plusPrice;
-  DB.audit.unshift({action:'Planes actualizados',user:CU.email,ip:'10.0.0.2',device:'Web',time:'Ahora'});
-  showToast('Planes actualizados exitosamente','success');
+  const c=DB.contentHome;
+  c.basicPrice=document.getElementById('ceBP').value;c.basicSpeed=document.getElementById('ceBS').value;
+  c.medioPrice=document.getElementById('ceMP').value;c.medioSpeed=document.getElementById('ceMS').value;
+  c.plusPrice=document.getElementById('cePP').value;c.plusSpeed=document.getElementById('cePS').value;
+  DB.plans['Básico'].price=+c.basicPrice;DB.plans['Medio'].price=+c.medioPrice;DB.plans['Plus'].price=+c.plusPrice;
+  addAudit('Planes actualizados',CU.email);toast('Planes actualizados','ok');
 }
 
-function auditoriaPage(){
-  return`
-<h1 class="page-title">Registro de <span class="hi">Auditoría</span></h1>
-<div class="card-box"><h3>Actividad del Sistema <span style="font-size:12px;font-weight:400;color:var(--text2)">${DB.audit.length} registros</span></h3>
-${DB.audit.map(a=>`<div class="audit-item">
-  <div class="audit-ico">📋</div>
-  <div class="audit-info">
-    <div class="audit-action">${a.action}</div>
-    <div class="audit-meta">👤 ${a.user} &nbsp;·&nbsp; 🌐 ${a.ip} &nbsp;·&nbsp; 💻 ${a.device}</div>
-  </div>
-  <div class="audit-time">${a.time}</div>
+// ── AUDITORÍA ──
+function pgAuditoria(){
+  return`<div class="box"><div class="box-hd"><h3>Registro de Auditoría</h3><span>${DB.audit.length} registros</span></div>
+${DB.audit.map(a=>`<div class="audit-row">
+<div class="audit-ico">📋</div>
+<div class="audit-data"><div class="action">${a.action}</div><div class="meta">👤 ${a.user} · 🌐 ${a.ip} · 💻 ${a.device}</div></div>
+<div class="audit-time">${a.time}</div>
 </div>`).join('')}</div>`;
 }
 
 // ============================================================
 // CLIENTE PAGES
 // ============================================================
-function dashCliente(){
+function pgDashCliente(){
   const myPay=DB.payments.filter(p=>p.uid===CU.id);
   const total=myPay.filter(p=>p.status==='confirmed').reduce((a,b)=>a+b.amount,0);
-  const planInfo=DB.plans[CU.plan]||{speed:'N/A',price:0};
+  const pi=DB.plans[CU.plan]||{speed:'N/A',price:0};
   return`
-<h1 class="page-title">Bienvenido, <span class="hi">${CU.name.split(' ')[0]}</span></h1>
-<div class="my-plan">
+<div class="my-plan-card">
   <h3>Mi Plan Activo</h3>
-  <div class="plan-display">
-    <div class="plan-badge">${CU.plan}</div>
-    <div class="plan-meta">
-      <h4>${planInfo.speed} simétrico</h4>
-      <p>$${planInfo.price}/mes · IP Fija incluida</p>
-      <div class="plan-status">Conexión Activa</div>
+  <div class="my-plan-row">
+    <div class="plan-pill-badge">${CU.plan}</div>
+    <div class="plan-details">
+      <h4>${pi.speed} simétrico</h4>
+      <p>$${pi.price}/mes · IP fija incluida</p>
+      <div class="plan-online">Conexión activa</div>
     </div>
-    <div class="plan-acts">
-      <button class="btn-sm primary" onclick="loadTab('registrar')">Pagar Mes</button>
-      <button class="btn-sm ghost" onclick="loadTab('mispagos')">Ver Historial</button>
+    <div class="plan-card-acts">
+      <button class="btn-sm btn-sm-w" onclick="loadPage('registrar')">Pagar mes</button>
+      <button class="btn-sm btn-sm-ghost" onclick="loadPage('mispagos')">Historial</button>
     </div>
   </div>
 </div>
-<div class="kpi-grid">
-  <div class="kpi"><div class="kpi-label">Total Pagado</div><div class="kpi-value gold">$${total}</div><div class="kpi-sub">Pagos confirmados</div></div>
-  <div class="kpi"><div class="kpi-label">Pagos Realizados</div><div class="kpi-value aqua">${myPay.filter(p=>p.status==='confirmed').length}</div></div>
-  <div class="kpi"><div class="kpi-label">Próximo Vencimiento</div><div class="kpi-value">30 Abr</div><div class="kpi-sub">2025</div></div>
-  <div class="kpi"><div class="kpi-label">Velocidad</div><div class="kpi-value">${planInfo.speed.split(' ')[0]}<span style="font-size:14px;font-weight:400"> Mbps</span></div></div>
+<div class="kpi-row">
+  <div class="kpi-card"><div class="kpi-lbl">Total pagado</div><div class="kpi-val gr">$${total}</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Pagos confirmados</div><div class="kpi-val">${myPay.filter(p=>p.status==='confirmed').length}</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Próx. vencimiento</div><div class="kpi-val">30 Abr</div><div class="kpi-sub">2025</div></div>
+  <div class="kpi-card"><div class="kpi-lbl">Velocidad</div><div class="kpi-val">${pi.speed}</div></div>
 </div>
-<div class="card-box"><h3>Pagos Recientes</h3>
-<div class="table-wrap"><table>
-<thead><tr><th>Mes</th><th>Monto</th><th>Método</th><th>Estado</th><th>Acción</th></tr></thead>
-<tbody>${myPay.slice(0,3).map(p=>`<tr>
+<div class="box"><div class="box-hd"><h3>Mis últimos pagos</h3></div>
+<div class="tw"><table>
+<thead><tr><th>Mes</th><th>Monto</th><th>Método</th><th>Estado</th><th>Recibo</th></tr></thead>
+<tbody>${myPay.slice(0,4).map(p=>`<tr>
 <td>${p.month}</td><td><strong>$${p.amount}</strong></td><td>${p.method}</td>
-<td><span class="pill ${p.status==='confirmed'?'ok':p.status==='pending'?'pend':'rej'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'Pendiente':'Rechazado'}</span></td>
-<td><button class="act-btn dl" onclick="downloadRecibo(${p.id})">⬇ Recibo</button></td>
+<td><span class="pill ${p.status==='confirmed'?'pill-ok':p.status==='pending'?'pill-warn':'pill-err'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'En revisión':'Rechazado'}</span></td>
+<td>${p.status==='confirmed'?`<button class="ab ab-gray" onclick="downloadRecibo(${p.id})">⬇</button>`:'—'}</td>
 </tr>`).join('')}</tbody></table></div></div>`;
 }
 
-function misPagosCliente(){
+function pgMisPagos(){
   const myPay=DB.payments.filter(p=>p.uid===CU.id);
-  return`
-<h1 class="page-title">Historial de <span class="hi">Pagos</span></h1>
-<div class="card-box"><h3>Mis Pagos <span style="font-size:12px;font-weight:400;color:var(--text2)">${myPay.length} registros</span></h3>
-<div class="table-wrap"><table>
+  return`<div class="box"><div class="box-hd"><h3>Historial de Pagos</h3><span>${myPay.length} registros</span></div>
+<div class="tw"><table>
 <thead><tr><th>Mes</th><th>Monto</th><th>Método</th><th>Referencia</th><th>Fecha</th><th>Estado</th><th>Recibo</th></tr></thead>
 <tbody>${myPay.map(p=>`<tr>
 <td>${p.month}</td><td><strong>$${p.amount}</strong></td><td>${p.method}</td>
-<td style="font-family:monospace;font-size:12px">${p.ref}</td><td style="font-size:12px">${p.date}</td>
-<td><span class="pill ${p.status==='confirmed'?'ok':p.status==='pending'?'pend':'rej'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'En revisión':'Rechazado'}</span></td>
-<td>${p.status==='confirmed'?`<button class="act-btn dl" onclick="downloadRecibo(${p.id})">⬇ Descargar</button>`:'—'}</td>
+<td style="font-family:monospace;font-size:12px;color:var(--ink3)">${p.ref}</td>
+<td style="font-size:12px;color:var(--ink4)">${p.date}</td>
+<td><span class="pill ${p.status==='confirmed'?'pill-ok':p.status==='pending'?'pill-warn':'pill-err'}">${p.status==='confirmed'?'Confirmado':p.status==='pending'?'En revisión':'Rechazado'}</span></td>
+<td>${p.status==='confirmed'?`<button class="ab ab-gray" onclick="downloadRecibo(${p.id})">⬇ Descargar</button>`:'—'}</td>
 </tr>`).join('')}</tbody></table></div></div>`;
 }
 
-let selMethod='';
-function registrarPago(){
-  return`
-<h1 class="page-title">Registrar <span class="hi">Pago</span></h1>
-<div class="card-box" style="max-width:560px">
-  <h3>Nuevo Registro de Pago</h3>
-  <div class="fg"><label class="fl">Mes que cancelas</label>
-  <select class="fi" id="pMes">
-    <option>Mayo 2025</option><option>Junio 2025</option><option>Julio 2025</option>
-  </select></div>
-  <div class="fg"><label class="fl">Monto Pagado ($)</label>
-  <input type="number" class="fi" id="pMonto" value="${DB.plans[CU.plan]?.price||45}" placeholder="45"></div>
-  <div class="fg"><label class="fl">Método de Pago</label>
-  <div class="pay-method-grid">
-    <div class="pm-opt" onclick="selPM('Zelle',this)"><div class="pm-icon">💛</div>Zelle</div>
-    <div class="pm-opt" onclick="selPM('Binance',this)"><div class="pm-icon">🔶</div>Binance</div>
-    <div class="pm-opt" onclick="selPM('Transferencia',this)"><div class="pm-icon">🏦</div>Transferencia</div>
-    <div class="pm-opt" onclick="selPM('Pago Móvil',this)"><div class="pm-icon">📱</div>Pago Móvil</div>
-    <div class="pm-opt" onclick="selPM('Efectivo',this)"><div class="pm-icon">💵</div>Efectivo</div>
-  </div></div>
-  <div class="fg" id="refField" style="display:none"><label class="fl">Número de Referencia / Comprobante</label>
-  <input type="text" class="fi" id="pRef" placeholder="Ej: ZLL-000000"></div>
-  <div class="fg"><label class="fl">Notas adicionales (opcional)</label>
-  <textarea class="fi" id="pNota" placeholder="Información adicional sobre el pago..." style="min-height:70px;resize:vertical"></textarea></div>
-  <button class="btn-block" onclick="submitPago()">Registrar Pago</button>
-  <p style="font-size:12px;color:var(--text2);margin-top:12px;text-align:center">Tu pago será revisado y confirmado por el equipo de NexaLink en máximo 24 horas hábiles.</p>
+function pgRegistrarPago(){
+  return`<div class="box" style="max-width:540px">
+<div class="box-hd"><h3>Nuevo Registro de Pago</h3></div>
+<div class="fg"><label class="fl">Mes a cancelar</label>
+<select class="fi" id="pMes"><option>Mayo 2025</option><option>Junio 2025</option><option>Julio 2025</option></select></div>
+<div class="fg"><label class="fl">Monto ($)</label>
+<input type="number" class="fi" id="pMonto" value="${DB.plans[CU.plan]?.price||45}" min="1" step="0.01"></div>
+<div class="fg"><label class="fl">Método de Pago</label>
+<div class="pm-grid">
+  <div class="pm-opt" onclick="selPM('Zelle',this)"><div class="pm-ico">💛</div>Zelle</div>
+  <div class="pm-opt" onclick="selPM('Binance',this)"><div class="pm-ico">🔶</div>Binance</div>
+  <div class="pm-opt" onclick="selPM('Transferencia',this)"><div class="pm-ico">🏦</div>Transferencia</div>
+  <div class="pm-opt" onclick="selPM('Pago Móvil',this)"><div class="pm-ico">📱</div>Pago Móvil</div>
+  <div class="pm-opt" onclick="selPM('Efectivo',this)"><div class="pm-ico">💵</div>Efectivo</div>
+</div></div>
+<div class="fg" id="refField" style="display:none"><label class="fl">Número de Referencia</label>
+<input type="text" class="fi" id="pRef" placeholder="Ej: ZLL-000000"></div>
+<div class="fg"><label class="fl">Nota adicional (opcional)</label>
+<textarea class="fi" id="pNota" placeholder="Información extra sobre el pago..." style="min-height:70px"></textarea></div>
+<button class="btn-block" onclick="submitPago()">Registrar Pago</button>
+<p style="font-size:12px;color:var(--ink4);text-align:center;margin-top:12px">Tu pago será confirmado en máximo 24 horas hábiles.</p>
 </div>`;
 }
 
 function selPM(method,el){
   selMethod=method;
-  document.querySelectorAll('.pm-opt').forEach(e=>e.classList.remove('sel'));
-  el.classList.add('sel');
+  document.querySelectorAll('.pm-opt').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');
   document.getElementById('refField').style.display=method!=='Efectivo'?'block':'none';
 }
 
 function submitPago(){
-  if(!selMethod){showToast('Selecciona un método de pago','error');return;}
+  if(!selMethod){toast('Selecciona método de pago','err');return;}
   const mes=document.getElementById('pMes').value;
   const monto=+document.getElementById('pMonto').value;
-  const ref=(document.getElementById('pRef')?.value||'EFV-'+Date.now()).trim()||'EFV-'+Date.now();
-  if(!monto||monto<1){showToast('Ingresa un monto válido','error');return;}
-  const newP={id:DB.payments.length+1,uid:CU.id,user:CU.name,month:mes,amount:monto,method:selMethod,ref:ref||'EFV-'+Date.now(),status:'pending',date:new Date().toISOString().slice(0,10),plan:CU.plan};
-  DB.payments.unshift(newP);
-  DB.audit.unshift({action:`Pago registrado $${monto} – ${selMethod}`,user:CU.email,ip:'192.168.1.10',device:'Web',time:'Ahora'});
-  showToast('Pago registrado. En revisión...','success');
-  selMethod='';
-  loadTab('mispagos');
+  const ref=(document.getElementById('pRef')?.value||('EFV-'+Date.now())).trim();
+  if(!monto||monto<1){toast('Ingresa un monto válido','err');return;}
+  DB.payments.unshift({id:DB.payments.length+1,uid:CU.id,user:CU.name,month:mes,amount:monto,method:selMethod,ref,status:'pending',date:new Date().toISOString().slice(0,10),plan:CU.plan});
+  addAudit(`Pago registrado $${monto} ${selMethod}`,CU.email);
+  toast('Pago registrado. En revisión...','ok');selMethod='';loadPage('mispagos');
 }
 
-function soporteCliente(){
+function pgSoporte(){
   const myQ=DB.questions.filter(q=>q.uid===CU.id);
   return`
-<h1 class="page-title">Soporte y <span class="hi">Sugerencias</span></h1>
-<div class="qa-inp-area" style="max-width:560px;margin-bottom:24px">
-  <h3>Enviar Pregunta o Sugerencia</h3>
-  <div class="fg"><label class="fl">Tu mensaje</label>
-  <textarea class="fi" id="qText" placeholder="Escribe tu pregunta o sugerencia aquí..." style="min-height:100px;resize:vertical"></textarea></div>
-  <button class="btn-sm primary" style="width:100%;padding:12px;border-radius:50px" onclick="enviarQ()">Enviar Mensaje</button>
+<div class="box" style="max-width:540px;margin-bottom:20px">
+  <div class="box-hd"><h3>Enviar mensaje</h3></div>
+  <div class="fg"><label class="fl">Tu pregunta o sugerencia</label>
+  <textarea class="fi" id="qTxt" placeholder="Escribe aquí..." style="min-height:90px;resize:vertical"></textarea></div>
+  <button class="btn-block" onclick="enviarQ()">Enviar mensaje</button>
 </div>
-<h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:14px">Mis Preguntas</h3>
-${myQ.length===0?'<p style="color:var(--text2);font-size:14px">Aún no has enviado preguntas.</p>':myQ.map(q=>`
-<div class="qa-item">
-  <div class="qa-head">
+<h3 style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-bottom:14px">Mis consultas</h3>
+${myQ.length===0?'<p style="color:var(--ink4)">Aún no has enviado preguntas.</p>':myQ.map(q=>`
+<div class="qa-card">
+  <div class="qa-hd">
     <div class="qa-av">${q.av}</div>
-    <div class="qa-user-info"><div class="qa-uname">Tú</div><div class="qa-date">${q.date}</div></div>
-    <span class="qa-status ${q.status}">${q.status==='answered'?'Respondido':'En revisión'}</span>
+    <div class="qa-info"><div class="uname">Tú</div><div class="udate">${q.date}</div></div>
+    <span class="pill ${q.status==='answered'?'pill-ok':'pill-warn'}">${q.status==='answered'?'Respondido':'En revisión'}</span>
   </div>
   <div class="qa-q">${q.q}</div>
-  ${q.a?`<div class="qa-ans"><strong>Respuesta de NexaLink:</strong> ${q.a}</div>`:'<div style="font-size:12px;color:var(--text2);margin-top:8px">⏳ Esperando respuesta...</div>'}
+  ${q.a?`<div class="qa-ans"><strong>NexaLink:</strong> ${q.a}</div>`:'<p style="font-size:12px;color:var(--ink4);margin-top:6px">⏳ Esperando respuesta...</p>'}
 </div>`).join('')}`;
 }
 
 function enviarQ(){
-  const txt=document.getElementById('qText')?.value.trim();
-  if(!txt){showToast('Escribe tu pregunta o sugerencia','error');return;}
-  DB.questions.unshift({id:DB.questions.length+1,uid:CU.id,user:CU.name,av:CU.av,q:txt,date:new Date().toISOString().slice(0,10),status:'open',a:''});
-  DB.audit.unshift({action:'Pregunta enviada',user:CU.email,ip:'192.168.1.10',device:'Web',time:'Ahora'});
-  showToast('Mensaje enviado. Te responderemos pronto.','success');
-  loadTab('soporte');
+  const txt=document.getElementById('qTxt')?.value.trim();
+  if(!txt){toast('Escribe tu pregunta','err');return;}
+  DB.questions.unshift({id:Date.now(),uid:CU.id,user:CU.name,av:CU.av,q:txt,date:new Date().toISOString().slice(0,10),status:'open',a:''});
+  addAudit('Pregunta enviada',CU.email);toast('Mensaje enviado','ok');loadPage('soporte');
 }
 
 // ============================================================
 // UTILS
 // ============================================================
+function addAudit(action,user){
+  DB.audit.unshift({action,user,ip:'192.168.'+Math.floor(Math.random()*9+1)+'.'+Math.floor(Math.random()*200+10),device:'Web / Browser',time:'Ahora'});
+}
+
+function destroyCharts(){
+  if(chartInst1){chartInst1.destroy();chartInst1=null;}
+  if(chartInst2){chartInst2.destroy();chartInst2=null;}
+}
+
+function toggleSb(){document.getElementById('sidebar').classList.toggle('open');}
+
 function downloadRecibo(id){
   const p=DB.payments.find(x=>x.id===id);if(!p)return;
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo NexaLink</title>
-<style>body{font-family:Arial,sans-serif;max-width:500px;margin:40px auto;padding:40px;border:2px solid #b8883c;border-radius:12px}
-h1{color:#b8883c;font-size:24px;margin-bottom:4px}.logo{font-size:20px;font-weight:800;margin-bottom:20px}
-.logo span{color:#b8883c}.field{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:14px}
-.total{font-size:18px;font-weight:800;color:#b8883c}.footer{text-align:center;font-size:12px;color:#999;margin-top:20px}
-.badge{background:#e6f7f4;color:#1a8f7a;padding:4px 12px;border-radius:50px;font-size:12px;font-weight:600}
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;max-width:480px;margin:48px auto;padding:40px;border:1px solid #e5e3de;border-radius:12px;background:#fff}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#111;margin-bottom:6px}.logo em{color:#2d6a4f;font-style:normal}
+h2{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#111;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #e5e3de}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f4f3f0;font-size:14px;color:#3a3a38}
+.row:last-of-type{border:none}.row strong{color:#111}
+.total{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#2d6a4f}
+.badge{display:inline-block;padding:3px 10px;background:#f0f7f4;border:1px solid #b7dfc9;border-radius:50px;font-size:12px;font-weight:500;color:#2d6a4f}
+.footer{text-align:center;font-size:11px;color:#a8a7a3;margin-top:24px;padding-top:16px;border-top:1px solid #e5e3de}
 </style></head><body>
-<div class="logo">Nexa<span>Link</span></div>
-<h1>Recibo de Pago</h1>
-<div class="field"><span>Cliente</span><span>${p.user}</span></div>
-<div class="field"><span>Plan</span><span>${p.plan}</span></div>
-<div class="field"><span>Mes</span><span>${p.month}</span></div>
-<div class="field"><span>Método</span><span>${p.method}</span></div>
-<div class="field"><span>Referencia</span><span>${p.ref}</span></div>
-<div class="field"><span>Fecha</span><span>${p.date}</span></div>
-<div class="field"><span>Estado</span><span class="badge">Confirmado ✓</span></div>
-<div class="field"><span>Monto Total</span><span class="total">$${p.amount} USD</span></div>
-<div class="footer">NexaLink Internet Services · Recibo generado automáticamente · nexalink.com</div>
+<div class="logo">Nexa<em>Link</em></div>
+<h2>Recibo de Pago</h2>
+<div class="row"><span>Cliente</span><strong>${p.user}</strong></div>
+<div class="row"><span>Plan</span><strong>${p.plan}</strong></div>
+<div class="row"><span>Período</span><strong>${p.month}</strong></div>
+<div class="row"><span>Método de pago</span><strong>${p.method}</strong></div>
+<div class="row"><span>Referencia</span><strong>${p.ref}</strong></div>
+<div class="row"><span>Fecha</span><strong>${p.date}</strong></div>
+<div class="row"><span>Estado</span><span class="badge">Confirmado ✓</span></div>
+<div class="row" style="margin-top:16px;padding-top:16px;border-top:1px solid #e5e3de"><span>Total</span><span class="total">$${p.amount} USD</span></div>
+<div class="footer">NexaLink Internet Services · Recibo generado automáticamente · Este documento es válido como comprobante de pago.</div>
 </body></html>`;
   const blob=new Blob([html],{type:'text/html'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`recibo-nexalink-${p.month.replace(' ','-')}.html`;
-  a.click();
-  showToast('Recibo descargado','success');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`recibo-nexalink-${p.id}.html`;a.click();
+  toast('Recibo descargado','ok');
 }
 
-function showToast(msg,type='success'){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast '+type;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3200);
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
 }
+
+function topAction(){}
 </script>
 </body>
 </html>
